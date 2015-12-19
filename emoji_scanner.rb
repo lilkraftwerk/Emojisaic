@@ -36,6 +36,7 @@ class EmojiScanner
       green: @green,
       blue: @blue
     }
+    
     File.open("output.json","w") do |f|
       f.write(JSON.pretty_generate(full_list))
     end
@@ -57,12 +58,17 @@ class EmojiScanner
   end
 end
 
-File.open("output.json","w") do |f|
-      f.write(JSON.pretty_generate({}))
+
+def generate_emoji_map
+  File.open("map.json","w") do |f|
+        f.write(JSON.pretty_generate({}))
+  end
+
+  dir = Dir['emojis/*.png']
+  
+  dir.each do |file|
+    EmojiScanner.new(file)
+  end
 end
 
-dir = Dir['emojis/*.png']
-
-dir.each do |file|
-  EmojiScanner.new(file)
-end
+generate_emoji_map
