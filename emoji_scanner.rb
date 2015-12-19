@@ -1,4 +1,5 @@
 require 'Rmagick'
+require 'json'
 
 class EmojiScanner
   def initialize(filename)
@@ -28,10 +29,16 @@ class EmojiScanner
   end
 
   def output
-    puts @filename
-    puts @red
-    puts @green
-    puts @blue
+    puts "doing #{@filename}"
+    full_list = JSON.parse(File.open('output.json').read)
+    full_list[@filename] = {
+      red: @red,
+      green: @green,
+      blue: @blue
+    }
+    File.open("output.json","w") do |f|
+      f.write(JSON.pretty_generate(full_list))
+    end
   end
 
   def scan_emoji
@@ -48,4 +55,14 @@ class EmojiScanner
     @blue += pixel.blue / 257
     @green += pixel.green / 257
   end
+end
+
+File.open("output.json","w") do |f|
+      f.write(JSON.pretty_generate({}))
+end
+
+dir = Dir['emojis/*.png']
+
+dir.each do |file|
+  EmojiScanner.new(file)
 end
