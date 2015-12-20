@@ -58,7 +58,6 @@ class EmojiScanner
   end
 end
 
-
 def generate_emoji_map
   File.open("map.json","w") do |f|
         f.write(JSON.pretty_generate({}))
