@@ -14,10 +14,10 @@ class ImageReplacer
   end
 
   def replace_image(filename)
-    @old_image = Magick::Image.read(filename)[0]
+    @filename = filename
+    @old_image = Magick::Image.read("images/#{filename}")[0]
     @new_image = Magick::Image.new(@old_image.columns, @old_image.rows)
     scan_in_blocks
-    p @pixels
     add_emojis_in_blocks
   end
 
@@ -32,6 +32,7 @@ class ImageReplacer
       end
       x = 0
       y += 8
+      puts y 
     end
   end
 
@@ -73,7 +74,8 @@ class ImageReplacer
   def add_emojis_in_blocks
     puts "adding emojis in blocks now"
     # [start_x, start_y, red, green, blue]
-    @pixels.each do |pixel_map|
+    @pixels.each_with_index do |pixel_map, index|
+      puts "on #{index} / #{@pixels.length}"
       x = pixel_map[0]
       y = pixel_map[1]
       r = pixel_map[2]
@@ -82,10 +84,10 @@ class ImageReplacer
 
       emoji_filename = @comparer.compare_rgb(r, g, b)      
       emoji = Magick::Image.read(emoji_filename)[0]
-      emoji.resize!(8, 8)
+      emoji.resize!(10, 10)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
     end
-    @new_image.write('obama.png')
+    @new_image.write(@filename)
   end
 
   def add_emojis_to_new_image
@@ -114,4 +116,4 @@ class ImageReplacer
 end
 
 c = ImageReplacer.new
-c.replace_image('images/obama.jpg')
+c.replace_image('dog.jpg')
