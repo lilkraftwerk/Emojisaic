@@ -12,14 +12,15 @@ class GifMaker
   def make_emoji_gif(name)
     puts "doing #{name}"
     @name = name
-    @image = Magick::Image.read("images/#{name}.gif")
-    # binding.pry
+    @image = Magick::ImageList.new
+    @image.read("images/#{name}.gif")
+    @image = @image.coalesce
     write_frames
     @files.each_with_index do |filename, index|
       puts "on frame #{index + 1} of #{@files.length}"
-      # @replacer.replace_image(filename)
+      @replacer.replace_image(filename)
     end
-    # write_gif
+    write_gif
   end
 
   def write_gif
@@ -38,6 +39,7 @@ class GifMaker
       else
         filename = "0#{index}"
       end
+      p image
       new_filename = "tmp/#{@name}-#{filename}.png"
       @files << new_filename
       duplicate = image.dup
@@ -49,4 +51,5 @@ end
 t = GifMaker.new
 t.make_emoji_gif('leia')
 t.make_emoji_gif('bb8')
+t.make_emoji_gif('ash')
 t.make_emoji_gif('skully')
