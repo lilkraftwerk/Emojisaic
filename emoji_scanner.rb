@@ -30,14 +30,14 @@ class EmojiScanner
 
   def output
     puts "doing #{@filename}"
-    full_list = JSON.parse(File.open('output.json').read)
+    full_list = JSON.parse(File.open('map.json').read)
     full_list[@filename] = {
       red: @red,
       green: @green,
       blue: @blue
     }
     
-    File.open("output.json","w") do |f|
+    File.open("map.json","w") do |f|
       f.write(JSON.pretty_generate(full_list))
     end
   end
