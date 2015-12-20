@@ -67,8 +67,8 @@ class ImageReplacer
   def add_emojis_in_blocks
     # [start_x, start_y, red, green, blue]
     @pixels.each_with_index do |pixel_map, index|
-      x = pixel_map[0] 
-      y = pixel_map[1] 
+      x = pixel_map[0]
+      y = pixel_map[1]
       r = pixel_map[2]
       g = pixel_map[3]
       b = pixel_map[4]
