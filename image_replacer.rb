@@ -1,7 +1,3 @@
-require 'Rmagick'
-require 'JSON'
-require 'pry'
-
 require_relative 'pixel_comparison'
 
 class ImageReplacer
@@ -10,12 +6,11 @@ class ImageReplacer
     # get each pixel or set of pixels
     # create a new image
     # for each pixel or set of pixels, replace with emoji
-
   end
 
   def replace_image(filename)
     @filename = filename
-    @old_image = Magick::Image.read("images/#{filename}")[0]
+    @old_image = Magick::Image.read(filename)[0]
     @new_image = Magick::Image.new(@old_image.columns * 2, @old_image.rows * 2)
     scan_in_blocks
     add_emojis_in_blocks
@@ -32,7 +27,6 @@ class ImageReplacer
       end
       x = 0
       y += 8
-      puts y 
     end
   end
 
@@ -62,7 +56,6 @@ class ImageReplacer
   def scan_old_image
     @pixels = []
     @old_image.columns.times do |x|
-      puts "#{x} / #{@old_image.columns}"
       @old_image.rows.times do |y|
         pixel = @old_image.pixel_color(x, y)
         emoji = @comparer.compare(pixel)
@@ -72,10 +65,8 @@ class ImageReplacer
   end
 
   def add_emojis_in_blocks
-    puts "adding emojis in blocks now"
     # [start_x, start_y, red, green, blue]
     @pixels.each_with_index do |pixel_map, index|
-      puts "on #{index} / #{@pixels.length}"
       x = pixel_map[0] * 2 
       y = pixel_map[1] * 2 
       r = pixel_map[2]
@@ -88,7 +79,7 @@ class ImageReplacer
       emoji.resize!(16, 16)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
     end
-    @new_image.write(@filename)
+    @new_image.write("#{@filename}")
   end
 
   def add_emojis_to_new_image
@@ -100,7 +91,7 @@ class ImageReplacer
       emoji.resize!(8, 8)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
     end
-    @new_image.write('giraffe.jpg')
+    @new_image.write(filename)
   end
 
     #start at 0 0 
@@ -116,5 +107,3 @@ class ImageReplacer
   end
 end
 
-c = ImageReplacer.new
-c.replace_image('giraffe.jpg')

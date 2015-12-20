@@ -1,1 +1,4 @@
 scratch.rb
+output
+tmp/*.*
+images/*.*
