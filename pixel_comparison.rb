@@ -32,7 +32,7 @@ class PixelComparer
     @scores[filename] = set_score(emoji_info)
   end
 
-  def set_score(emoji_info)
+  def return_score(emoji_info)
     score = 0
     score += absolute_difference(emoji_info['red'], @red)
     score += absolute_difference(emoji_info['green'], @green)
@@ -41,10 +41,11 @@ class PixelComparer
   end
 
   def return_matching_emoji
-    minimum_score = @scores.values.min
-    potentials = @scores.select { |_k, score| score == minimum_score }
-    # binding.pry if potentials.length > 1
-    potentials.keys.sample
+    # minimum_score = @scores.values.min
+    # potentials = @scores.select { |_k, score| score == minimum_score }
+    # potentials.keys.sample
+    ### good place for a variable
+    @scores.sort_by{ |k, v| v }[0..12].sample.first
   end
 
   def set_pixel_colors

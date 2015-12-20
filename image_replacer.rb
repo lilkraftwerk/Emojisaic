@@ -4,9 +4,6 @@ class ImageReplacer
   def initialize
     @comparer = PixelComparer.new
     @EMOJI_SIZE = 16
-    # get each pixel or set of pixels
-    # create a new image
-    # for each pixel or set of pixels, replace with emoji
   end
 
   def replace_image(filename)
@@ -29,7 +26,7 @@ class ImageReplacer
         x += @EMOJI_SIZE
       end
       x = 0
-      puts "#{y} of #{@old_image.rows}"
+      puts "#{y} of #{@old_image.rows}" if y % (@EMOJI_SIZE * 10) == 0
       y += @EMOJI_SIZE
     end
 
@@ -73,7 +70,7 @@ class ImageReplacer
     # [start_x, start_y, red, green, blue]
     puts "adding emojis now"
     @pixels.each_with_index do |pixel_map, index|
-      puts "#{index} of #{@pixels.length}"
+      puts "adding_emoji #{index} of #{@pixels.length}" if index % 500 == 0 
       x = pixel_map[0]
       y = pixel_map[1]
       r = pixel_map[2]

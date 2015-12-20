@@ -23,21 +23,23 @@ class EmojiScanner
   end
 
   def divide_result
-    @red = @red / @total_pixels
-    @blue = @blue / @total_pixels
-    @green = @green / @total_pixels
+    @red /= @total_pixels
+    @blue /= @total_pixels
+    @green /= @total_pixels
   end
 
   def output
     puts "doing #{@filename}"
     full_list = JSON.parse(File.open('map.json').read)
-    full_list[@filename] = {
-      red: @red,
-      green: @green,
-      blue: @blue
-    }
-    
-    File.open("map.json","w") do |f|
+    if @red != 255 && @green != 255 && @blue != 255
+      full_list[@filename] = {
+        red: @red,
+        green: @green,
+        blue: @blue
+      }
+    end
+
+    File.open('map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
     end
   end
@@ -52,6 +54,7 @@ class EmojiScanner
   end
 
   def scan_pixel(pixel)
+    # put something here that skips if the pixel is transparent somehow
     @red += pixel.red / 257
     @blue += pixel.blue / 257
     @green += pixel.green / 257
@@ -59,12 +62,13 @@ class EmojiScanner
 end
 
 def generate_emoji_map
-  File.open("map.json","w") do |f|
-        f.write(JSON.pretty_generate({}))
+  File.open('map.json', 'w') do |f|
+    f.write(JSON.pretty_generate({}))
   end
 
   dir = Dir['emojis/*.png']
-  
+    # EmojiScanner.new('images/white.png')
+
   dir.each do |file|
     EmojiScanner.new(file)
   end
