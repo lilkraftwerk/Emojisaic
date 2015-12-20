@@ -24,7 +24,7 @@ class ImageReplacer
   def scan_old_image
     @pixels = []
     @old_image.columns.times do |x|
-      puts "Doing column #{x} of #{@old_image.columns}"
+      puts "#{x} / #{@old_image.columns}"
       @old_image.rows.times do |y|
         pixel = @old_image.pixel_color(x, y)
         emoji = @comparer.compare(pixel)
@@ -34,10 +34,12 @@ class ImageReplacer
   end
 
   def add_emojis_to_new_image
+    puts "adding emojis now"
     @pixels.each do |pixel_map|
       x = pixel_map[0]
       y = pixel_map[1]
       emoji = Magick::Image.read(pixel_map[2])[0]
+      emoji.resize!(8, 8)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
     end
     @new_image.write('giraffe.jpg')
