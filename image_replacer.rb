@@ -3,12 +3,15 @@ require_relative 'pixel_comparison'
 class ImageReplacer
   def initialize
     @comparer = PixelComparer.new
+    @EMOJI_SIZE = 16
     # get each pixel or set of pixels
     # create a new image
     # for each pixel or set of pixels, replace with emoji
   end
 
   def replace_image(filename)
+    regex = /\/(.+)\./
+    @name = regex.match(filename)[1]
     @filename = filename
     @old_image = Magick::Image.read(filename)[0]
     @new_image = Magick::Image.new(@old_image.columns, @old_image.rows)
@@ -22,12 +25,14 @@ class ImageReplacer
     y = 0
     until y > @old_image.rows
       until x > @old_image.columns
-        @pixels << average_area(x, y, 8, 8)
-        x += 8
+        @pixels << average_area(x, y, @EMOJI_SIZE, @EMOJI_SIZE)
+        x += @EMOJI_SIZE
       end
       x = 0
-      y += 8
+      puts "#{y} of #{@old_image.rows}"
+      y += @EMOJI_SIZE
     end
+
   end
 
   def average_area(start_x, start_y, width, height)
@@ -66,7 +71,9 @@ class ImageReplacer
 
   def add_emojis_in_blocks
     # [start_x, start_y, red, green, blue]
+    puts "adding emojis now"
     @pixels.each_with_index do |pixel_map, index|
+      puts "#{index} of #{@pixels.length}"
       x = pixel_map[0]
       y = pixel_map[1]
       r = pixel_map[2]
@@ -76,9 +83,10 @@ class ImageReplacer
       # y += rand(-1..1)
       emoji_filename = @comparer.compare_rgb(r, g, b)      
       emoji = Magick::Image.read(emoji_filename)[0]
-      emoji.resize!(8, 8)
+      emoji.resize!(@EMOJI_SIZE, @EMOJI_SIZE)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
     end
+    @filename[@name] = "#{@name}-mosaic"
     @new_image.write("#{@filename}")
   end
 
@@ -93,12 +101,6 @@ class ImageReplacer
     end
     @new_image.write(filename)
   end
-
-    #start at 0 0 
-    # move right by 16 px
-    #when x is greater than total width, move down 16 px
-    # start over
-    # when y is greater than total, print image
 
   def scan_pixel(pixel)
     @red += pixel.red / 257

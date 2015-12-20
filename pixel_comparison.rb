@@ -43,6 +43,7 @@ class PixelComparer
   def return_matching_emoji
     minimum_score = @scores.values.min
     potentials = @scores.select { |_k, score| score == minimum_score }
+    # binding.pry if potentials.length > 1
     potentials.keys.sample
   end
 
