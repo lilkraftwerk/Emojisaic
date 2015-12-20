@@ -49,7 +49,11 @@ class GifMaker
 end
 
 t = GifMaker.new
-t.make_emoji_gif('leia')
-t.make_emoji_gif('bb8')
-t.make_emoji_gif('ash')
-t.make_emoji_gif('skully')
+# t.make_emoji_gif('xmas')
+t.make_emoji_gif('dog')
+t.make_emoji_gif('candy')
+t.make_emoji_gif('tripdog')
+t.make_emoji_gif('yoda')
+t.make_emoji_gif('pizza')
+t.make_emoji_gif('poke')
+
