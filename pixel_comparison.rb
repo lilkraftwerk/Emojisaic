@@ -7,9 +7,17 @@ class PixelComparer
     @scores = {}
   end
 
-  def compare(pixel)
+  def compare_pixel(pixel)
     @pixel = pixel
     set_pixel_colors
+    check_every_emoji
+    return_matching_emoji
+  end
+
+  def compare_rgb(r, g, b)
+    @red = r
+    @green = g
+    @blue = b
     check_every_emoji
     return_matching_emoji
   end
