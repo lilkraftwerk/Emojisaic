@@ -1,5 +1,4 @@
-require 'ruby-progressbar'
-
+require_relative 'progress'
 require_relative 'pixel_comparison'
 
 class ImageReplacer
@@ -22,6 +21,7 @@ class ImageReplacer
     @pixels = []
     x = 0
     y = 0
+    bar = ProgressBar.new(@old_image.rows, 'image scan')
 
     until y > @old_image.rows
       until x > @old_image.columns
@@ -30,7 +30,7 @@ class ImageReplacer
       end
       x = 0
       y += @EMOJI_SIZE
-      @EMOJI_SIZE.times { bar.increment }
+      bar.add(@EMOJI_SIZE)
     end
 
   end
@@ -40,8 +40,6 @@ class ImageReplacer
     red = 0
     green = 0
     blue = 0
-
-    ProgressBar.create(:title => "Items", :starting_at => 20, :total => 200)
 
 
     height.times do |h|
@@ -74,9 +72,10 @@ class ImageReplacer
 
   def add_emojis_in_blocks
     # [start_x, start_y, red, green, blue]
-    puts "adding emojis now"
+    bar = ProgressBar.new(@pixels.length, 'new image generation')
+
     @pixels.each_with_index do |pixel_map, index|
-      puts "adding_emoji #{index} of #{@pixels.length}" if index % 500 == 0 
+
       x = pixel_map[0]
       y = pixel_map[1]
       r = pixel_map[2]
@@ -88,8 +87,12 @@ class ImageReplacer
       emoji = Magick::Image.read(emoji_filename)[0]
       emoji.resize!(@EMOJI_SIZE, @EMOJI_SIZE)
       @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
+
+      bar.add(1)
+
     end
     @filename[@name] = "#{@name}-mosaic"
+    puts "all done! writing #{@filename}"
     @new_image.write("#{@filename}")
   end
 

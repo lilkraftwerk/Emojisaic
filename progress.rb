@@ -1,20 +1,26 @@
+require 'pry'
+
 class ProgressBar
-  def initialize(finish, text = 'progress')
-    @counter = 0
-    @finish = finish
-    @one_percent = finish / 100
+  def initialize(finish, text = 'progress', steps = 1)
+    puts
+    @counter = 0.0
+    @finish = finish.to_f
+    @one_percent = finish / 100.00
     @text = text
+    @steps = 1
   end
 
   def current_percentage
-    (@counter / @one_percent) / 2
+    return 100 if @counter >= @finish
+    @counter / @one_percent
   end
 
   def write_to_console
-    print "\r#{@text}: #{@counter} of #{@finish} #{'*' * current_percentage} #{' ' * (50 - current_percentage)} |"
+    print "\r#{@text}: #{current_percentage.to_i}%"
   end
 
-  def update(amount_to_increment)
+  def add(amount_to_increment)
+    old_percentage = current_percentage
     @counter += amount_to_increment
     write_to_console
   end
