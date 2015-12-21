@@ -2,7 +2,8 @@ require 'JSON'
 require 'pry'
 
 class PixelComparer
-  def initialize
+  def initialize(options = {})
+    @options = options[:compare]
     @map = JSON.parse(File.open('map.json').read)
     @scores = {}
   end
@@ -41,11 +42,21 @@ class PixelComparer
   end
 
   def return_matching_emoji
-    minimum_score = @scores.values.min
-    potentials = @scores.select { |_k, score| score == minimum_score }
-    potentials.keys.sample
-    ### good place for a variable
-    # @scores.sort_by{ |k, v| v }.first
+    if search_range
+      return @scores.sort_by{ |k, v| v }[0..search_range].sample.first
+    else 
+      threshold = set_threshold
+      potentials = @scores.select { |_k, score| score == threshold }
+      potentials.keys.sample
+    end
+  end
+
+  def set_threshold
+    reverse? ? @scores.values.max : @scores.values.min
+  end
+
+  def reverse?
+    @options[:reverse]
   end
 
   def set_pixel_colors
@@ -56,5 +67,12 @@ class PixelComparer
 
   def absolute_difference(x, y)
     (x - y).abs
+  end
+
+  private
+
+  def search_range
+    return @options[:range] if @options[:range]
+    false
   end
 end

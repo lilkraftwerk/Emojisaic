@@ -1,8 +1,6 @@
 #### add something that weights emojis based on
 #### how many pixels are transparent vs
 #### how many are not transparent
-
-
 require 'Rmagick'
 require 'json'
 
@@ -71,10 +69,7 @@ def generate_emoji_map
     f.write(JSON.pretty_generate({}))
   end
 
-  dir = Dir['emojis/*.png']
-    # EmojiScanner.new('images/white.png')
-
-  dir.each do |file|
+  Dir['emojis/*.png'].each do |file|
     EmojiScanner.new(file)
   end
 end

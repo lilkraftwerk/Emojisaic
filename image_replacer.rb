@@ -2,9 +2,9 @@ require_relative 'progress'
 require_relative 'pixel_comparison'
 
 class ImageReplacer
-  def initialize(options = { noisy: true, quality: 3 })
-    @options = options
-    @comparer = PixelComparer.new
+  def initialize(options = {})
+    @options = options[:replace]
+    @comparer = PixelComparer.new(options)
     set_quality
   end
 
@@ -69,10 +69,8 @@ class ImageReplacer
     }
   end
 
-
   def get_pixel_colors(x, y)
     pixel = @old_image.pixel_color(x, y)
-
     {
       r: pixel.red / 257,
       g: pixel.green / 257,
@@ -84,7 +82,6 @@ class ImageReplacer
     bar = ProgressBar.new(@pixels.length, 'new image generation') if noisy?
 
     @pixels.each do |pixel_map|
-
       x = pixel_map[:x]
       y = pixel_map[:y]
       r = pixel_map[:r]
@@ -107,7 +104,6 @@ class ImageReplacer
 
   def all_done
     @filename[@name] = "#{@name}-mosaic"
-    puts
     puts "all done! writing #{@filename}"
     @new_image.write("#{@filename}")
   end
@@ -119,6 +115,10 @@ class ImageReplacer
   end
 
   private 
+
+  def compare_options
+    @options[:compare_options]
+  end
 
   def noisy?
     @options[:noisy]
@@ -135,7 +135,7 @@ class ImageReplacer
       2 => [16, 2],
       3 => [8, 2],
       4 => [4, 1],
-      5 => [4, 2]
+      5 => [2, 2]
     }
     selected_quality = all_qualities[@options[:quality]]
     @emoji_size = selected_quality[0]

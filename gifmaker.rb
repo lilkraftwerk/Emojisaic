@@ -6,8 +6,8 @@ require_relative 'progress'
 require_relative 'image_replacer'
 
 class GifMaker
-  def initialize
-    @replacer = ImageReplacer.new
+  def initialize(options = {})
+    @replacer = ImageReplacer.new(options)
   end
 
   def make_emoji_gif(name)
@@ -55,5 +55,22 @@ class GifMaker
   end
 end
 
-t = GifMaker.new
-t.make_emoji_gif('ash')
+options = {
+  replace: {
+    noisy: true,
+    quality: 5,
+    # random_offset: 0
+  },
+  compare: {
+    # range: 100
+  }
+}
+t = GifMaker.new(options)
+
+
+t.make_emoji_gif('akira1')
+t.make_emoji_gif('akira2')
+t.make_emoji_gif('akira3')
+
+
+
