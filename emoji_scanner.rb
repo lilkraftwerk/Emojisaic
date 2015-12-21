@@ -20,24 +20,23 @@ class EmojiScanner
     @red = 0
     @blue = 0
     @green = 0
+    @counted_pixels = 0
   end
 
   def divide_result
-    @red /= @total_pixels
-    @blue /= @total_pixels
-    @green /= @total_pixels
+    @red /= @counted_pixels
+    @blue /= @counted_pixels
+    @green /= @counted_pixels
   end
 
   def output
     puts "doing #{@filename}"
     full_list = JSON.parse(File.open('map.json').read)
-    if @red != 255 && @green != 255 && @blue != 255
-      full_list[@filename] = {
-        red: @red,
-        green: @green,
-        blue: @blue
-      }
-    end
+    full_list[@filename] = {
+      red: @red,
+      green: @green,
+      blue: @blue
+    }
 
     File.open('map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
@@ -54,7 +53,8 @@ class EmojiScanner
   end
 
   def scan_pixel(pixel)
-    # put something here that skips if the pixel is transparent somehow
+    return if (pixel.opacity / 257) > 245
+    @counted_pixels += 1
     @red += pixel.red / 257
     @blue += pixel.blue / 257
     @green += pixel.green / 257

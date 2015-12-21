@@ -4,7 +4,7 @@ require_relative 'pixel_comparison'
 class ImageReplacer
   def initialize
     @comparer = PixelComparer.new
-    @EMOJI_SIZE = 4
+    @EMOJI_SIZE = 16
   end
 
   def replace_image(filename)
@@ -41,7 +41,6 @@ class ImageReplacer
     green = 0
     blue = 0
 
-
     height.times do |h|
       y = start_y + h 
       width.times do |w|
@@ -57,17 +56,6 @@ class ImageReplacer
     blue = blue / total_pixels
     result = [start_x, start_y, red, green, blue]
     result 
-  end
-
-  def scan_old_image
-    @pixels = []
-    @old_image.columns.times do |x|
-      @old_image.rows.times do |y|
-        pixel = @old_image.pixel_color(x, y)
-        emoji = @comparer.compare(pixel)
-        @pixels << [x, y, emoji]
-      end
-    end
   end
 
   def add_emojis_in_blocks
@@ -92,20 +80,9 @@ class ImageReplacer
 
     end
     @filename[@name] = "#{@name}-mosaic"
+    puts
     puts "all done! writing #{@filename}"
     @new_image.write("#{@filename}")
-  end
-
-  def add_emojis_to_new_image
-    puts "adding emojis now"
-    @pixels.each do |pixel_map|
-      x = pixel_map[0] + rand(-3..3)
-      y = pixel_map[1] + rand(-3..3)
-      emoji = Magick::Image.read(pixel_map[2])[0]
-      emoji.resize!(8, 8)
-      @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
-    end
-    @new_image.write(filename)
   end
 
   def scan_pixel(pixel)
