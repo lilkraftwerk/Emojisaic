@@ -41,11 +41,11 @@ class PixelComparer
   end
 
   def return_matching_emoji
-    # minimum_score = @scores.values.min
-    # potentials = @scores.select { |_k, score| score == minimum_score }
-    # potentials.keys.sample
+    minimum_score = @scores.values.min
+    potentials = @scores.select { |_k, score| score == minimum_score }
+    potentials.keys.sample
     ### good place for a variable
-    @scores.sort_by{ |k, v| v }[0..1].sample.first
+    # @scores.sort_by{ |k, v| v }.first
   end
 
   def set_pixel_colors

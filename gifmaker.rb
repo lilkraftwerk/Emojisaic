@@ -12,8 +12,7 @@ class GifMaker
   def make_emoji_gif(name)
     puts "doing #{name}"
     @name = name
-    @image = Magick::ImageList.new
-    @image.read("images/#{name}.gif")
+    @image = Magick::ImageList.new.read("images/#{name}.gif")
     @image = @image.coalesce
     write_frames
     @files.each_with_index do |filename, index|
@@ -26,7 +25,8 @@ class GifMaker
   def write_gif
     gif = Magick::ImageList.new
     @files.each do |frame|
-      gif << Magick::Image.read(frame)[0]
+      this_frame = Magick::Image.read(frame)[0]
+      gif << this_frame
     end
     gif.write("output/#{@name}.gif")
   end
@@ -39,17 +39,21 @@ class GifMaker
       else
         filename = "0#{index}"
       end
-      p image
       new_filename = "tmp/#{@name}-#{filename}.png"
       @files << new_filename
-      duplicate = image.dup
-      duplicate.write(new_filename)
+      image.write(new_filename)
     end
   end
 end
 
 t = GifMaker.new
 # t.make_emoji_gif('xmas')
+# t.make_emoji_gif('moon')
+# t.make_emoji_gif('ariel')
+t.make_emoji_gif('emoji1')
+t.make_emoji_gif('dipset')
+
+
 # t.make_emoji_gif('ash')
 # t.make_emoji_gif('leia')
 # t.make_emoji_gif('skully')
@@ -61,9 +65,9 @@ t = GifMaker.new
 # t.make_emoji_gif('pizza')
 # t.make_emoji_gif('broad')
 # t.make_emoji_gif('pizza2')
-t.make_emoji_gif('triangles')
-t.make_emoji_gif('pizza3')
-t.make_emoji_gif('pusheen')
+# t.make_emoji_gif('triangles')
+# t.make_emoji_gif('pizza3')
+# t.make_emoji_gif('pusheen')
 t.make_emoji_gif('rick1')
 t.make_emoji_gif('rick2')
 t.make_emoji_gif('rick3')

@@ -2,9 +2,10 @@ require_relative 'progress'
 require_relative 'pixel_comparison'
 
 class ImageReplacer
-  def initialize
+  def initialize(options = {})
     @comparer = PixelComparer.new
-    @emoji_size = 8
+    @emoji_size = 4
+    @multiplier = 2
   end
 
   def replace_image(filename)
@@ -12,10 +13,17 @@ class ImageReplacer
     @name = regex.match(filename)[1]
     @filename = filename
     @old_image = Magick::Image.read(filename)[0]
-    @new_image = Magick::Image.new(@old_image.columns, @old_image.rows)
+    @new_image = create_new_image
     scan_in_blocks
     add_emojis_in_blocks
     all_done
+  end
+
+  def create_new_image
+    Magick::Image.new(
+      @old_image.columns * @multiplier,
+      @old_image.rows * @multiplier
+    )
   end
 
   def scan_in_blocks
@@ -88,8 +96,8 @@ class ImageReplacer
 
       emoji_filename = @comparer.compare_rgb(r, g, b)      
       emoji = Magick::Image.read(emoji_filename)[0]
-      emoji.resize!(@emoji_size, @emoji_size)
-      @new_image.composite!(emoji, x, y, Magick::OverCompositeOp)
+      emoji.resize!(@emoji_size * @multiplier, @emoji_size * @multiplier)
+      @new_image.composite!(emoji, x * @multiplier, y * @multiplier, Magick::OverCompositeOp)
 
       bar.add(1)
     end
