@@ -1,7 +1,10 @@
 require 'JSON'
 require 'pry'
 
-class PixelComparer
+##
+## Compare a set of given colors and return an emoji with similar colors
+##
+class EmojiFinder
   def initialize(options = {})
     @options = options[:compare]
     @map = JSON.parse(File.open('map.json').read)
@@ -15,12 +18,13 @@ class PixelComparer
     return_matching_emoji
   end
 
-  def compare_rgb(r, g, b)
-    @red = r
-    @green = g
-    @blue = b
+  def closest_emoji(pixel)
+    @red = pixel.r
+    @green = pixel.g
+    @blue = pixel.b
     check_every_emoji
-    return_matching_emoji
+    match_filename = return_matching_emoji
+    Magick::Image.read(match_filename)[0]
   end
 
   def check_every_emoji
@@ -43,8 +47,8 @@ class PixelComparer
 
   def return_matching_emoji
     if search_range
-      return @scores.sort_by{ |k, v| v }[0..search_range].sample.first
-    else 
+      return @scores.sort_by { |_k, v| v }[0..search_range].sample.first
+    else
       threshold = set_threshold
       potentials = @scores.select { |_k, score| score == threshold }
       potentials.keys.sample
