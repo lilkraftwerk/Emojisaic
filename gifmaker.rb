@@ -5,33 +5,29 @@ require 'pry'
 require_relative 'progress'
 require_relative 'image_replacer'
 
+##
+## Creates multiple emoji mosaics and strings them together into an animation
+##
 class GifMaker
   def initialize(options = {})
     @replacer = ImageReplacer.new(options)
   end
 
   def make_emoji_gif(name)
-    puts "doing #{name}"
     @name = name
     @image = Magick::ImageList.new.read("images/#{name}.gif")
     @image = @image.coalesce
     write_frames
-
-    bar = ProgressBar.new(@files.length, 'creating gif frames')
-
-    @files.each_with_index do |filename, index|
-      # puts "on frame #{index + 1} of #{@files.length}"
+    # bar = ProgressBar.new(@files.length, 'creating gif frames')
+    @files.each do |filename|
       @replacer.replace_image(filename)
-      bar.add(1)
     end
     write_gif
   end
 
   def write_gif
     gif = Magick::ImageList.new
-
     bar = ProgressBar.new(@files.length, 'writing gif')
-
     @files.each do |frame|
       this_frame = Magick::Image.read(frame)[0]
       gif << this_frame
@@ -43,11 +39,7 @@ class GifMaker
   def write_frames
     @files = []
     @image.each_with_index do |image, index|
-      if index > 9
-        filename = index
-      else
-        filename = "0#{index}"
-      end
+      index > 9 ? filename = index : filename = "0#{index}"
       new_filename = "tmp/#{@name}-#{filename}.png"
       @files << new_filename
       image.write(new_filename)
@@ -55,22 +47,18 @@ class GifMaker
   end
 end
 
-options = {
-  replace: {
-    noisy: true,
-    quality: 5,
-    # random_offset: 0
-  },
-  compare: {
-    # range: 100
-  }
-}
-t = GifMaker.new(options)
+# options = {
+#   replace: {
+#     noisy: true,
+#     quality: 5,
+#     # random_offset: 0
+#   },
+#   compare: {
+#     # range: 100
+#   }
+# }
+# t = GifMaker.new(options)
 
-
-t.make_emoji_gif('akira1')
-t.make_emoji_gif('akira2')
-t.make_emoji_gif('akira3')
-
-
-
+# t.make_emoji_gif('akira1')
+# t.make_emoji_gif('akira2')
+# t.make_emoji_gif('akira3')

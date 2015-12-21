@@ -4,6 +4,7 @@ require 'pry'
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
+
 class EmojiFinder
   def initialize(options = {})
     @options = options[:compare]

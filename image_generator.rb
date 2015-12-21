@@ -3,6 +3,7 @@ require_relative 'image_scanner'
 ##
 ## Generates emoji mosaics
 ##
+
 class EmojiMosaicGenerator
   def initialize(options = {})
     @options = options[:generator]
@@ -21,7 +22,7 @@ class EmojiMosaicGenerator
   def add_emojis_to_new_image
     @pixel_map.each do |p_map|
       p_map = adjust_coordinates(p_map)
-      emoji = @comparer.closest_emoji(pixel)
+      emoji = @comparer.closest_emoji(p_map)
       emoji.resize!(@emoji_size * @zoom, @emoji_size * @zoom)
       @new_image.composite!(emoji, p_map.x, p_map.y, Magick::OverCompositeOp)
     end
@@ -59,7 +60,7 @@ class EmojiMosaicGenerator
   def set_quality
     quality_map = [[16, 1], [16, 2], [8, 2], [4, 1], [2, 2]]
     return quality_map[2] unless @options[:quality]
-    selected_quality = quality_map[@options[:quality]] - 1
+    selected_quality = quality_map[@options[:quality] - 1]
     @emoji_size = selected_quality[0]
     @zoom = selected_quality[1]
   end

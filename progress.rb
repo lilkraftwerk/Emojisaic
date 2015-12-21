@@ -1,13 +1,15 @@
 require 'pry'
 
+##
+## Custom progress bar for when it takes a while
+##
 class ProgressBar
-  def initialize(finish, text = 'progress', steps = 1)
+  def initialize(finish, text = 'progress')
     puts
     @counter = 0.0
     @finish = finish.to_f
     @one_percent = finish / 100.00
     @text = text
-    @steps = 1
   end
 
   def current_percentage
@@ -20,7 +22,6 @@ class ProgressBar
   end
 
   def add(amount_to_increment)
-    old_percentage = current_percentage
     @counter += amount_to_increment
     write_to_console
   end

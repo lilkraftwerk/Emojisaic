@@ -7,6 +7,7 @@ require 'json'
 ##
 ## Scans all the emojis and finds their average colors
 ##
+
 class EmojiScanner
   def initialize(filename)
     @filename = filename
