@@ -4,7 +4,7 @@ require_relative 'pixel_comparison'
 class ImageReplacer
   def initialize
     @comparer = PixelComparer.new
-    @EMOJI_SIZE = 16
+    @EMOJI_SIZE = 8
   end
 
   def replace_image(filename)
