@@ -2,6 +2,7 @@ require 'Rmagick'
 require 'JSON'
 require 'pry'
 
+require_relative 'progress'
 require_relative 'image_replacer'
 
 class GifMaker
@@ -15,18 +16,26 @@ class GifMaker
     @image = Magick::ImageList.new.read("images/#{name}.gif")
     @image = @image.coalesce
     write_frames
+
+    bar = ProgressBar.new(@files.length, 'creating gif frames')
+
     @files.each_with_index do |filename, index|
-      puts "on frame #{index + 1} of #{@files.length}"
+      # puts "on frame #{index + 1} of #{@files.length}"
       @replacer.replace_image(filename)
+      bar.add(1)
     end
     write_gif
   end
 
   def write_gif
     gif = Magick::ImageList.new
+
+    bar = ProgressBar.new(@files.length, 'writing gif')
+
     @files.each do |frame|
       this_frame = Magick::Image.read(frame)[0]
       gif << this_frame
+      bar.add(1)
     end
     gif.write("output/#{@name}.gif")
   end
@@ -47,28 +56,4 @@ class GifMaker
 end
 
 t = GifMaker.new
-# t.make_emoji_gif('xmas')
-# t.make_emoji_gif('moon')
-# t.make_emoji_gif('ariel')
-t.make_emoji_gif('emoji1')
-t.make_emoji_gif('dipset')
-
-
-# t.make_emoji_gif('ash')
-# t.make_emoji_gif('leia')
-# t.make_emoji_gif('skully')
-# t.make_emoji_gif('bb8')
-# t.make_emoji_gif('dog')
-# t.make_emoji_gif('candy')
-# t.make_emoji_gif('tripdog')
-# t.make_emoji_gif('yoda')
-# t.make_emoji_gif('pizza')
-# t.make_emoji_gif('broad')
-# t.make_emoji_gif('pizza2')
-# t.make_emoji_gif('triangles')
-# t.make_emoji_gif('pizza3')
-# t.make_emoji_gif('pusheen')
-t.make_emoji_gif('rick1')
-t.make_emoji_gif('rick2')
-t.make_emoji_gif('rick3')
-
+t.make_emoji_gif('ash')

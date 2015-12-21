@@ -1,3 +1,8 @@
+#### add something that weights emojis based on
+#### how many pixels are transparent vs
+#### how many are not transparent
+
+
 require 'Rmagick'
 require 'json'
 
