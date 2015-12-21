@@ -1,9 +1,11 @@
+require 'ruby-progressbar'
+
 require_relative 'pixel_comparison'
 
 class ImageReplacer
   def initialize
     @comparer = PixelComparer.new
-    @EMOJI_SIZE = 16
+    @EMOJI_SIZE = 4
   end
 
   def replace_image(filename)
@@ -20,14 +22,15 @@ class ImageReplacer
     @pixels = []
     x = 0
     y = 0
+
     until y > @old_image.rows
       until x > @old_image.columns
         @pixels << average_area(x, y, @EMOJI_SIZE, @EMOJI_SIZE)
         x += @EMOJI_SIZE
       end
       x = 0
-      puts "#{y} of #{@old_image.rows}" if y % (@EMOJI_SIZE * 10) == 0
       y += @EMOJI_SIZE
+      @EMOJI_SIZE.times { bar.increment }
     end
 
   end
@@ -37,6 +40,9 @@ class ImageReplacer
     red = 0
     green = 0
     blue = 0
+
+    ProgressBar.create(:title => "Items", :starting_at => 20, :total => 200)
+
 
     height.times do |h|
       y = start_y + h 
