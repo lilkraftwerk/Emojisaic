@@ -21,6 +21,11 @@ class ProgressBar
     print "\r#{@text}: #{current_percentage.to_i}%"
   end
 
+  def set(current_amount)
+    @counter = current_amount
+    write_to_console
+  end
+
   def add(amount_to_increment)
     @counter += amount_to_increment
     write_to_console

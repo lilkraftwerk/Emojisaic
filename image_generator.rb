@@ -1,9 +1,10 @@
 require_relative 'image_scanner'
+require 'pathname'
+require 'pry'
 
 ##
 ## Generates emoji mosaics
 ##
-
 class EmojiMosaicGenerator
   def initialize(options = {})
     @options = options[:generator]
@@ -11,12 +12,17 @@ class EmojiMosaicGenerator
     set_quality
   end
 
-  def create_image(filename)
+  def create_image(filename, output_dir = '')
+    regex = /\/(.+)\./
+    @name = regex.match(filename)[1]
     @image = Magick::Image.read(filename)[0]
     @new_image = Magick::Image.new(@image.columns * @zoom, @image.rows * @zoom)
     @pixel_map = @scanner.generate_pixel_map(@image, @emoji_size)
     add_emojis_to_new_image
-    @new_image.write('images/yolo.png')
+    new_filename = filename[@name] = "#{@name}-mosaic"
+    @new_image.write("#{output_dir}/#{filename}") if output_dir != ''
+    @new_image.write(new_filename) unless output_dir != ''
+    new_filename
   end
 
   def add_emojis_to_new_image
@@ -25,10 +31,16 @@ class EmojiMosaicGenerator
       emoji = @comparer.closest_emoji(p_map)
       emoji.resize!(@emoji_size * @zoom, @emoji_size * @zoom)
       @new_image.composite!(emoji, p_map.x, p_map.y, Magick::OverCompositeOp)
+      update
     end
   end
 
   private
+
+  def update
+    @bar = ProgressBar.new(@pixel_map.length, 'image generation') unless @bar
+    @bar.add(1)
+  end
 
   def adjust_coordinates(pixel_map)
     pixel_map.x *= @zoom

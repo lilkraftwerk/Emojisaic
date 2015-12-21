@@ -4,7 +4,6 @@ require 'pry'
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
-
 class EmojiFinder
   def initialize(options = {})
     @options = options[:compare]
@@ -73,8 +72,6 @@ class EmojiFinder
   def absolute_difference(x, y)
     (x - y).abs
   end
-
-  private
 
   def search_range
     return @options[:range] if @options[:range]

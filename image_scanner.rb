@@ -4,32 +4,33 @@ require_relative 'pixel_comparison'
 ##
 ## Scan an image and return a map of average colors
 ##
-
 class ImageScanner
   def generate_pixel_map(image, emoji_size)
     @image = image
     @emoji_size = emoji_size
     @pixels = []
+    @x = 0
+    @y = 0
     scan_image
     @pixels
   end
 
-  def average_area(start_x, start_y, width, height)
+  def average_area
     colors = { r: 0, g: 0, b: 0 }
-    height.times do |h|
-      y = start_y + h
-      width.times do |w|
-        x = start_x + w
-        results = get_pixel_colors(x, y)
+    @emoji_size.times do |h|
+      new_y = @y + h
+      @emoji_size.times do |w|
+        new_x = @x + w
+        results = get_pixel_colors(new_x, new_y)
         colors = add_results_to_tally(results, colors)
       end
     end
-    format_color_averages(start_x, start_y, colors, width, height)
+    format_color_averages(colors)
   end
 
-  def format_color_averages(start_x, start_y, colors, width, height)
-    div = divide_pixels(colors, width * height)
-    { x: start_x, y: start_y, r: div[:r], g: div[:g], b: div[:b] }
+  def format_color_averages(colors)
+    div = divide_pixels(colors, @emoji_size**2)
+    { x: @x, y: @y, r: div[:r], g: div[:g], b: div[:b] }
   end
 
   def add_results_to_tally(results, colors)
@@ -40,15 +41,14 @@ class ImageScanner
   end
 
   def scan_image
-    x = 0
-    y = 0
-    until y > @image.rows
-      until x > @image.columns
-        @pixels << Pixel.new(average_area(x, y, @emoji_size, @emoji_size))
-        x += @emoji_size
+    until @y > @image.rows
+      until @x > @image.columns
+        @pixels << Pixel.new(average_area)
+        @x += @emoji_size
       end
-      x = 0
-      y += @emoji_size
+      @x = 0
+      @y += @emoji_size
+      update
     end
   end
 
@@ -74,12 +74,16 @@ class ImageScanner
     @blue += pixel.blue / 257
     @green += pixel.green / 257
   end
+
+  def update
+    @bar = ProgressBar.new(@image.rows, 'image scanning') unless @bar
+    @bar.set(@y)
+  end
 end
 
 ##
 ## Just a little holder for information about pixel color and location
 ##
-
 class Pixel
   attr_accessor :x, :y, :r, :g, :b
 
