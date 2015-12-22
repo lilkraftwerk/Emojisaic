@@ -52,7 +52,7 @@ end
 options = {
   generator: {
     noisy: true,
-    quality: 3,
+    quality: 5,
     # random_offset: 0.2
   },
   compare: {
@@ -69,12 +69,25 @@ gif = GifMaker.new(options)
 # t.make_emoji_gif('bulba')
 # t.make_emoji_gif('glitch1')
 # t.make_emoji_gif('glitch2')
-t = Time.now
-gif.make_emoji_gif('ariel')
+t1 = Time.now
+
+
+# gif.make_emoji_gif('beyonce')
+# gif.make_emoji_gif('al')
+
+# gif.make_emoji_gif('lando')
+# gif.make_emoji_gif('champagne1')
+# gif.make_emoji_gif('champagne2')
+# gif.make_emoji_gif('ariel')
+# gif.make_emoji_gif('picard')
+# gif.make_emoji_gif('leia22')
+gif.make_emoji_gif('threepio2')
+gif.make_emoji_gif('starwarstitle')
 t2 = Time.now
 puts
 puts
-puts t2 - t
-# t.make_emoji_gif('beyonce')
-# t.make_emoji_gif('champagne1')
-# t.make_emoji_gif('champagne2')
+
+puts t2 - t1
+
+
+
