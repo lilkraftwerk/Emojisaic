@@ -4,6 +4,8 @@ require 'pry'
 
 require_relative 'progress'
 require_relative 'image_generator'
+require_relative 'preview_generator'
+
 
 ##
 ## Creates multiple emoji mosaics and strings them together into an animation
@@ -23,6 +25,16 @@ class GifMaker
       @generator.create_image(filename)
     end
     write_gif
+  end
+
+  def write_preview
+    gif = Magick::ImageList.new
+    gif << Magick::Image.read(@files[0])[0]
+    gif << Magick::Image.read(@files[1])[0]
+    gif << Magick::Image.read(@files[2])[0]
+    output_dest = "output/#{@name}-preview.gif"
+    gif.write(output_dest)
+    puts "wrote preview to #{output_dest}"
   end
 
   def write_gif
@@ -59,35 +71,11 @@ options = {
     # range: 0
   }
 }
-gif = GifMaker.new(options)
-# t.make_emoji_gif('akira3')
-# t.make_emoji_gif('loop')
-# t.make_emoji_gif('bb82')
-# t.make_emoji_gif('whales')
-# t.make_emoji_gif('arnold')
-# t.make_emoji_gif('togepi')
-# t.make_emoji_gif('bulba')
-# t.make_emoji_gif('glitch1')
-# t.make_emoji_gif('glitch2')
-t1 = Time.now
+# gif = GifMaker.new(options)
+# gif.make_emoji_gif('xwing')
 
-
-# gif.make_emoji_gif('beyonce')
-# gif.make_emoji_gif('al')
-
-# gif.make_emoji_gif('lando')
-# gif.make_emoji_gif('champagne1')
-# gif.make_emoji_gif('champagne2')
-# gif.make_emoji_gif('ariel')
-# gif.make_emoji_gif('picard')
-# gif.make_emoji_gif('leia22')
-gif.make_emoji_gif('threepio2')
-gif.make_emoji_gif('starwarstitle')
-t2 = Time.now
-puts
-puts
-
-puts t2 - t1
+# preview = PreviewGenerator.new
+# preview.make_preview('obiwan', 5, 8)
 
 
 

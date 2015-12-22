@@ -60,6 +60,7 @@ class EmojiFinder
   end
 
   def set_threshold
+    # @scores.values.max
     @options[:reverse] ? @scores.values.max : @scores.values.min
   end
 
