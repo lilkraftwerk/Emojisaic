@@ -26,12 +26,10 @@ class GifMaker
   end
 
   def write_gif
-    puts "frames emoji'd, now writing gif...."
     gif = Magick::ImageList.new
     bar = ProgressBar.new(@files.length, 'writing gif')
     @files.each do |frame|
-      this_frame = Magick::Image.read(frame)[0]
-      gif << this_frame
+      gif << Magick::Image.read(frame)[0]
       bar.add(1)
     end
     output_dest = "output/#{@name}.gif"
@@ -80,14 +78,3 @@ puts t2 - t
 # t.make_emoji_gif('beyonce')
 # t.make_emoji_gif('champagne1')
 # t.make_emoji_gif('champagne2')
-
-
-
-
-
-
-
-
-
-
-
