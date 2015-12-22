@@ -32,7 +32,7 @@ class EmojiMosaicGenerator
   def add_emojis_to_new_image
     @pixel_map.each do |p_map|
       p_map = adjust_coordinates(p_map)
-      emoji = @comparer.closest_emoji(p_map)
+      emoji = @finder.closest_emoji(p_map)
       emoji.resize!(@emoji_size * @zoom, @emoji_size * @zoom)
       @new_image.composite!(emoji, p_map.x, p_map.y, Magick::OverCompositeOp)
       @bar.add(1)
@@ -57,7 +57,7 @@ class EmojiMosaicGenerator
 
   def create_helpers(options)
     @scanner = ImageScanner.new
-    @comparer = EmojiFinder.new(options)
+    @finder = EmojiFinder.new(options)
   end
 
   def noisy?

@@ -9,6 +9,7 @@ class EmojiFinder
     @options = options[:compare]
     @map = JSON.parse(File.open('map.json').read)
     @scores = {}
+    @done_emojis = {}
   end
 
   def compare_pixel(pixel)
@@ -22,9 +23,20 @@ class EmojiFinder
     @red = pixel.r
     @green = pixel.g
     @blue = pixel.b
-    check_every_emoji
-    match_filename = return_matching_emoji
+    match_filename = find_emoji(pixel)
     Magick::Image.read(match_filename)[0]
+  end
+
+  def find_emoji(pixel)
+    return @done_emojis[pixel.to_s] if @done_emojis[pixel.to_s]
+    check_every_emoji
+    emoji = return_matching_emoji
+    add_to_done_emojis(pixel, emoji)
+    emoji
+  end
+
+  def add_to_done_emojis(pixel, emoji)
+    @done_emojis[pixel.to_s] = emoji
   end
 
   def check_every_emoji
@@ -51,17 +63,12 @@ class EmojiFinder
     else
       threshold = set_threshold
       potentials = @scores.select { |_k, score| score == threshold }
-      # potentials.keys.sample # for more random
-      potentials.keys.first # for more the same
+      potentials.keys.first
     end
   end
 
   def set_threshold
-    reverse? ? @scores.values.max : @scores.values.min
-  end
-
-  def reverse?
-    @options[:reverse]
+    @options[:reverse] ? @scores.values.max : @scores.values.min
   end
 
   def set_pixel_colors

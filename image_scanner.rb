@@ -1,5 +1,5 @@
 require_relative 'progress'
-require_relative 'pixel_comparison'
+require_relative 'emoji_finder'
 
 ##
 ## Scan an image and return a map of average colors
@@ -93,5 +93,9 @@ class Pixel
     @r = options[:r]
     @g = options[:g]
     @b = options[:b]
+  end
+
+  def to_s
+    "#{@r}#{@g}#{b}"
   end
 end
