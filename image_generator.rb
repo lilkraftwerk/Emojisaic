@@ -25,6 +25,7 @@ class EmojiMosaicGenerator
     @bar = ProgressBar.new(@pixel_map.length, 'image generation')
     add_emojis_to_new_image
     filename[@name] = "#{@name}-mosaic"
+    @finder.write_out_emojis
     @new_image.write(filename)
     filename
   end

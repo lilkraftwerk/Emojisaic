@@ -9,7 +9,7 @@ class EmojiFinder
     @options = options[:compare]
     @map = JSON.parse(File.open('map.json').read)
     @scores = {}
-    @done_emojis = {}
+    @done_emojis = JSON.parse(File.open('done.json').read)
   end
 
   def compare_pixel(pixel)
@@ -20,9 +20,9 @@ class EmojiFinder
   end
 
   def closest_emoji(pixel)
-    @red = pixel.r
-    @green = pixel.g
-    @blue = pixel.b
+    @r = pixel.r
+    @g = pixel.g
+    @b = pixel.b
     match_filename = find_emoji(pixel)
     Magick::Image.read(match_filename)[0]
   end
@@ -31,12 +31,14 @@ class EmojiFinder
     return @done_emojis[pixel.to_s] if @done_emojis[pixel.to_s]
     check_every_emoji
     emoji = return_matching_emoji
-    add_to_done_emojis(pixel, emoji)
+    @done_emojis[pixel.to_s] = emoji
     emoji
   end
 
-  def add_to_done_emojis(pixel, emoji)
-    @done_emojis[pixel.to_s] = emoji
+  def write_out_emojis
+    File.open('done.json', 'w') do |f| 
+      f.write(JSON.pretty_generate(@done_emojis))
+    end
   end
 
   def check_every_emoji
@@ -49,12 +51,8 @@ class EmojiFinder
     @scores[filename] = return_score(emoji_info)
   end
 
-  def return_score(emoji_info)
-    score = 0
-    score += absolute_difference(emoji_info['red'], @red)
-    score += absolute_difference(emoji_info['green'], @green)
-    score += absolute_difference(emoji_info['blue'], @blue)
-    score
+  def return_score(info)
+    (info['red'] - @r).abs + (info['green'] - @g).abs + (info['blue'] - @b).abs
   end
 
   def return_matching_emoji
@@ -72,13 +70,9 @@ class EmojiFinder
   end
 
   def set_pixel_colors
-    @red = @pixel.red / 257
-    @green = @pixel.green / 257
-    @blue = @pixel.blue / 257
-  end
-
-  def absolute_difference(x, y)
-    (x - y).abs
+    @r = @pixel.red / 257
+    @g = @pixel.green / 257
+    @b = @pixel.blue / 257
   end
 
   def search_range
