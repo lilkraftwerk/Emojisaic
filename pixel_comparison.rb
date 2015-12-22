@@ -51,7 +51,8 @@ class EmojiFinder
     else
       threshold = set_threshold
       potentials = @scores.select { |_k, score| score == threshold }
-      potentials.keys.sample
+      # potentials.keys.sample # for more random
+      potentials.keys.first # for more the same
     end
   end
 

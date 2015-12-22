@@ -5,6 +5,10 @@ require 'pry'
 ##
 ## Generates emoji mosaics
 ##
+
+### change this so it scans every coordinate
+### and doesn't have to search an emoji for identical coordinates ie
+### if there's a huge series of the same color it just knows
 class EmojiMosaicGenerator
   def initialize(options = {})
     @options = options[:generator]
@@ -12,17 +16,17 @@ class EmojiMosaicGenerator
     set_quality
   end
 
-  def create_image(filename, output_dir = '')
+  def create_image(filename)
     regex = /\/(.+)\./
     @name = regex.match(filename)[1]
     @image = Magick::Image.read(filename)[0]
     @new_image = Magick::Image.new(@image.columns * @zoom, @image.rows * @zoom)
     @pixel_map = @scanner.generate_pixel_map(@image, @emoji_size)
+    @bar = ProgressBar.new(@pixel_map.length, 'image generation')
     add_emojis_to_new_image
-    new_filename = filename[@name] = "#{@name}-mosaic"
-    @new_image.write("#{output_dir}/#{filename}") if output_dir != ''
-    @new_image.write(new_filename) unless output_dir != ''
-    new_filename
+    filename[@name] = "#{@name}-mosaic"
+    @new_image.write(filename)
+    filename
   end
 
   def add_emojis_to_new_image
@@ -31,16 +35,11 @@ class EmojiMosaicGenerator
       emoji = @comparer.closest_emoji(p_map)
       emoji.resize!(@emoji_size * @zoom, @emoji_size * @zoom)
       @new_image.composite!(emoji, p_map.x, p_map.y, Magick::OverCompositeOp)
-      update
+      @bar.add(1)
     end
   end
 
   private
-
-  def update
-    @bar = ProgressBar.new(@pixel_map.length, 'image generation') unless @bar
-    @bar.add(1)
-  end
 
   def adjust_coordinates(pixel_map)
     pixel_map.x *= @zoom
@@ -56,10 +55,6 @@ class EmojiMosaicGenerator
     pixel
   end
 
-  def create_progress_bar
-    @bar = ProgressBar.new(@pixel_map.length, 'new image generation') if noisy?
-  end
-
   def create_helpers(options)
     @scanner = ImageScanner.new
     @comparer = EmojiFinder.new(options)
@@ -70,7 +65,7 @@ class EmojiMosaicGenerator
   end
 
   def set_quality
-    quality_map = [[16, 1], [16, 2], [8, 2], [4, 1], [2, 2]]
+    quality_map = [[16, 1], [16, 2], [8, 2], [4, 1], [4, 2]]
     return quality_map[2] unless @options[:quality]
     selected_quality = quality_map[@options[:quality] - 1]
     @emoji_size = selected_quality[0]
