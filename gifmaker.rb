@@ -61,7 +61,7 @@ options = {
     # range: 0
   }
 }
-t = GifMaker.new(options)
+gif = GifMaker.new(options)
 # t.make_emoji_gif('akira3')
 # t.make_emoji_gif('loop')
 # t.make_emoji_gif('bb82')
@@ -71,8 +71,16 @@ t = GifMaker.new(options)
 # t.make_emoji_gif('bulba')
 # t.make_emoji_gif('glitch1')
 # t.make_emoji_gif('glitch2')
-# t.make_emoji_gif('eyes')
-t.make_emoji_gif('nate')
+t = Time.now
+gif.make_emoji_gif('ariel')
+t2 = Time.now
+puts
+puts
+puts t2 - t
+# t.make_emoji_gif('beyonce')
+# t.make_emoji_gif('champagne1')
+# t.make_emoji_gif('champagne2')
+
 
 
 

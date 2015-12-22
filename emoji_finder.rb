@@ -9,7 +9,7 @@ class EmojiFinder
     @options = options[:compare]
     @map = JSON.parse(File.open('map.json').read)
     @scores = {}
-    @done_emojis = JSON.parse(File.open('done.json').read)
+    @done_emojis = {}
   end
 
   def compare_pixel(pixel)
@@ -33,12 +33,6 @@ class EmojiFinder
     emoji = return_matching_emoji
     @done_emojis[pixel.to_s] = emoji
     emoji
-  end
-
-  def write_out_emojis
-    File.open('done.json', 'w') do |f| 
-      f.write(JSON.pretty_generate(@done_emojis))
-    end
   end
 
   def check_every_emoji

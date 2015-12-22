@@ -5,10 +5,6 @@ require 'pry'
 ##
 ## Generates emoji mosaics
 ##
-
-### change this so it scans every coordinate
-### and doesn't have to search an emoji for identical coordinates ie
-### if there's a huge series of the same color it just knows
 class EmojiMosaicGenerator
   def initialize(options = {})
     @options = options[:generator]
@@ -25,7 +21,6 @@ class EmojiMosaicGenerator
     @bar = ProgressBar.new(@pixel_map.length, 'image generation')
     add_emojis_to_new_image
     filename[@name] = "#{@name}-mosaic"
-    @finder.write_out_emojis
     @new_image.write(filename)
     filename
   end
@@ -66,7 +61,7 @@ class EmojiMosaicGenerator
   end
 
   def set_quality
-    quality_map = [[16, 1], [16, 2], [8, 2], [4, 1], [4, 2]]
+    quality_map = [[16, 1], [16, 2], [8, 1], [8, 2], [4, 2]]
     return quality_map[2] unless @options[:quality]
     selected_quality = quality_map[@options[:quality] - 1]
     @emoji_size = selected_quality[0]
