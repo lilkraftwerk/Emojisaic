@@ -44,7 +44,6 @@ class EmojiScanner
       blue: @blue,
       counted_pixels: @counted_pixels
     }
-
     File.open('map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
     end
