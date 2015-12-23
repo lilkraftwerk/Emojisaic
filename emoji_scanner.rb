@@ -41,7 +41,8 @@ class EmojiScanner
     full_list[@filename] = {
       red: @red,
       green: @green,
-      blue: @blue
+      blue: @blue,
+      counted_pixels: @counted_pixels
     }
 
     File.open('map.json', 'w') do |f|
