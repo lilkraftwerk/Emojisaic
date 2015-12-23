@@ -42,11 +42,15 @@ class EmojiScanner
       red: @red,
       green: @green,
       blue: @blue,
-      counted_pixels: @counted_pixels
+      coverage: get_coverage_percentage.to_i
     }
     File.open('map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
     end
+  end
+
+  def get_coverage_percentage
+    @counted_pixels.to_f / 4096.to_f * 100.0
   end
 
   def scan_emoji

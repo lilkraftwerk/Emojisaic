@@ -46,15 +46,16 @@ class EmojiFinder
   end
 
   def return_score(info)
+    binding.pry
     score = (info['red'] - @r).abs + (info['green'] - @g).abs + (info['blue'] - @b).abs
-    score - info["counted_pixels"]
+    # score - info["counted_pixels"]
   end
 
   def return_matching_emoji
     if search_range
       return @scores.sort_by { |_k, v| v }[0..search_range].sample.first
     else
-      # binding.pry
+      binding.pry
       threshold = set_threshold
       potentials = @scores.select { |_k, score| score == threshold }
       potentials.keys.first
