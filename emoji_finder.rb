@@ -46,17 +46,16 @@ class EmojiFinder
   end
 
   def return_score(info)
-    (info['red'] - @r).abs + (info['green'] - @g).abs + (info['blue'] - @b).abs
+    {
+      score: (info['red'] - @r).abs + (info['green'] - @g).abs + (info['blue'] - @b).abs,
+      coverage: info['coverage']
+    }
   end
 
   def return_matching_emoji
-    if search_range
-      return @scores.sort_by { |_k, v| v }[0..search_range].sample.first
-    else
-      threshold = set_threshold
-      potentials = @scores.select { |_k, score| score == threshold }
-      potentials.keys.first
-    end
+    ### janky for now but incorporates emoji coverage
+    sorted = @scores.sort_by { |k, v| v[:score] }[0..2]
+    sorted.sort_by{|r| r[1][:coverage]}.reverse.first.first
   end
 
   def set_threshold

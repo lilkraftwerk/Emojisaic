@@ -26,7 +26,7 @@ class GifMaker
       @new_filenames << @generator.create_image(filename)
     end
     write_gif
-    puts "done!"
+    @new_filenames.length
   end
 
   def write_gif
@@ -65,11 +65,38 @@ options = {
   }
 }
 
+# filename = 'monday'
+
+# gif = GifMaker.new(options)
+# gif_length = gif.make_emoji_gif(filename)
+
+# preview = PreviewGenerator.new
+# preview.make_preview(filename, gif_length / 4, gif_length / 2)
+
+# sleep 120
+
+# filename = 'hyperspace'
+
+# gif = GifMaker.new(options)
+# gif_length = gif.make_emoji_gif(filename)
+
+# preview = PreviewGenerator.new
+# preview.make_preview(filename, gif_length / 4, gif_length / 2)
+
+# sleep 120
+
+
+filename = 'giphy'
+
 gif = GifMaker.new(options)
-gif.make_emoji_gif('xmas')
+gif_length = gif.make_emoji_gif(filename)
 
 preview = PreviewGenerator.new
-# preview.make_preview('xwing', 18, 30)
+preview.make_preview(filename, 4, 3)
+
+
+
+
 
 
 
