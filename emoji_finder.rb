@@ -55,12 +55,20 @@ class EmojiFinder
 
   def return_matching_emoji
     if @options[:coverage]
-      sorted = @scores.sort_by { |k, v| v[:score] }[0..@options[:coverage]]
-      return sorted.sort_by { |r| r[1][:coverage] }.reverse.first.first
+      sort_by_pixel_coverage_and_color
     else
-      min = @scores.values.min_by { |v| v[:score] }
-      @scores.select { |_k, v| v == min }.keys.first
+      sort_by_color
     end
+  end
+
+  def sort_by_pixel_coverage_and_color
+    sorted = @scores.sort_by { |_k, v| v[:score] }[0..@options[:coverage]]
+    sorted.sort_by { |r| r[1][:coverage] }.reverse.first.first
+  end
+
+  def sort_by_color
+    min = @scores.values.min_by { |v| v[:score] }
+    @scores.select { |_k, v| v == min }.keys.first
   end
 
   def set_pixel_colors
@@ -72,7 +80,6 @@ class EmojiFinder
   def set_coverage_threshold
     return false unless @options[:coverage]
     @coverage_threshold = @options[:coverage]
-
   end
 
   def search_range

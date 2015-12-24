@@ -6,7 +6,6 @@ require_relative 'progress'
 require_relative 'image_generator'
 require_relative 'preview_generator'
 
-
 ##
 ## Creates multiple emoji mosaics and strings them together into an animation
 ##
@@ -15,14 +14,18 @@ class GifMaker
     @generator = EmojiMosaicGenerator.new(options)
   end
 
-  def make_emoji_gif(name)
+  def make_filenames(name)
     @name = name
     @filename = "input/#{@name}.gif"
     @new_filenames = []
+  end
+
+  def make_emoji_gif(name)
+    make_filenames(name)
     @image = Magick::ImageList.new.read(@filename).coalesce
     write_frames
     @files.each_with_index do |filename, index|
-      puts "Doing frame #{index}/#{@files.length}"
+      puts "Doing frame #{index + 1}/#{@files.length}"
       @new_filenames << @generator.create_image(filename)
     end
     write_gif
@@ -64,48 +67,3 @@ class GifMaker
     end
   end
 end
-
-options = {
-  generator: {
-    noisy: true,
-    quality: 5,
-    # random_offset: 0.2
-  },
-  finder: {
-    coverage: 100
-  }
-}
-
-# filename = 'monday'
-
-# gif = GifMaker.new(options)
-# gif_length = gif.make_emoji_gif(filename)
-
-# preview = PreviewGenerator.new
-# preview.make_preview(filename, gif_length / 4, gif_length / 2)
-
-# sleep 120
-
-# filename = 'hyperspace'
-
-# gif = GifMaker.new(options)
-# gif_length = gif.make_emoji_gif(filename)
-
-# preview = PreviewGenerator.new
-# preview.make_preview(filename, gif_length / 4, gif_length / 2)
-
-# sleep 120
-
-
-filename = 'giphy'
-
-gif = GifMaker.new(options)
-gif_length = gif.make_emoji_gif(filename)
-gif.make_preview(filename, 4, 3)
-
-
-
-
-
-
-

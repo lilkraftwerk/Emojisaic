@@ -38,18 +38,22 @@ class EmojiScanner
   def output
     puts "doing #{@filename}"
     full_list = JSON.parse(File.open('map.json').read)
-    full_list[@filename] = {
-      red: @red,
-      green: @green,
-      blue: @blue,
-      coverage: get_coverage_percentage.to_i
-    }
+    full_list[@filename] = emoji_score
     File.open('map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
     end
   end
 
-  def get_coverage_percentage
+  def emoji_score
+    {
+      red: @red,
+      green: @green,
+      blue: @blue,
+      coverage: coverage_percentage.to_i
+    }
+  end
+
+  def coverage_percentage
     @counted_pixels.to_f / 4096.to_f * 100.0
   end
 

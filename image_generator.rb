@@ -13,16 +13,20 @@ class EmojiMosaicGenerator
   end
 
   def create_image(filename)
-    regex = /\/(.+)\./
+    regex = %r{\/(.+)\.}
     @name = regex.match(filename)[1]
-    @image = Magick::Image.read(filename)[0]
-    @new_image = Magick::Image.new(@image.columns * @zoom, @image.rows * @zoom)
-    @pixel_map = @scanner.generate_pixel_map(@image, @emoji_size)
+    assign_images_and_pixel_map
     @bar = ProgressBar.new(@pixel_map.length, 'image generation')
     add_emojis_to_new_image
     filename[@name] = "#{@name}-mosaic"
     @new_image.write(filename)
     filename
+  end
+
+  def assign_images_and_pixel_map
+    @image = Magick::Image.read(filename)[0]
+    @new_image = Magick::Image.new(@image.columns * @zoom, @image.rows * @zoom)
+    @pixel_map = @scanner.generate_pixel_map(@image, @emoji_size)
   end
 
   def add_emojis_to_new_image
