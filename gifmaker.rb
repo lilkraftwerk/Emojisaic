@@ -29,6 +29,17 @@ class GifMaker
     @new_filenames.length
   end
 
+  def make_preview(name, frames, start_at = 0)
+    old_gif = Magick::Image.read("output/#{name}.gif")
+    new_gif = Magick::ImageList.new
+    (start_at..start_at + frames).to_a.each do |frame_number|
+      new_gif << old_gif[frame_number]
+    end
+    output_dest = "output/#{name}-preview.gif"
+    new_gif.write(output_dest)
+    puts "wrote preview to #{output_dest}"
+  end
+
   def write_gif
     gif = Magick::ImageList.new
     gif.ticks_per_second = @image.ticks_per_second
@@ -90,9 +101,7 @@ filename = 'giphy'
 
 gif = GifMaker.new(options)
 gif_length = gif.make_emoji_gif(filename)
-
-preview = PreviewGenerator.new
-preview.make_preview(filename, 4, 3)
+gif.make_preview(filename, 4, 3)
 
 
 
