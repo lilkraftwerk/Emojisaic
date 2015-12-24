@@ -4,7 +4,7 @@
 class EmojiFinder
   def initialize(options = {})
     @options = options[:finder]
-    @map = JSON.parse(File.open('map.json').read)
+    @map = JSON.parse(File.open('lib/map.json').read)
     @scores = {}
     @done_emojis = {}
   end

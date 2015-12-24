@@ -1,5 +1,3 @@
-require 'pry'
-
 ##
 ## Custom progress bar for when it takes a while
 ##

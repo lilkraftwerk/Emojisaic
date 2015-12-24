@@ -31,9 +31,9 @@ class EmojiScanner
 
   def output
     puts "doing #{@filename}"
-    full_list = JSON.parse(File.open('map.json').read)
+    full_list = JSON.parse(File.open('lib/map.json').read)
     full_list[@filename] = emoji_score
-    File.open('map.json', 'w') do |f|
+    File.open('lib/map.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_list))
     end
   end
@@ -68,15 +68,3 @@ class EmojiScanner
     @green += pixel.green / 257
   end
 end
-
-def generate_emoji_map
-  File.open('map.json', 'w') do |f|
-    f.write(JSON.pretty_generate({}))
-  end
-
-  Dir['emojis/*.png'].each do |file|
-    EmojiScanner.new(file)
-  end
-end
-
-generate_emoji_map

@@ -1,6 +1,3 @@
-require_relative 'image_scanner'
-
-
 ##
 ## Generates emoji mosaics
 ##
@@ -14,7 +11,7 @@ class EmojiMosaicGenerator
   def create_image(filename)
     regex = %r{\/(.+)\.}
     @name = regex.match(filename)[1]
-    assign_images_and_pixel_map
+    assign_images_and_pixel_map(filename)
     @bar = ProgressBar.new(@pixel_map.length, 'image generation')
     add_emojis_to_new_image
     filename[@name] = "#{@name}-mosaic"
@@ -22,7 +19,7 @@ class EmojiMosaicGenerator
     filename
   end
 
-  def assign_images_and_pixel_map
+  def assign_images_and_pixel_map(filename)
     @image = Magick::Image.read(filename)[0]
     @new_image = Magick::Image.new(@image.columns * @zoom, @image.rows * @zoom)
     @pixel_map = @scanner.generate_pixel_map(@image, @emoji_size)

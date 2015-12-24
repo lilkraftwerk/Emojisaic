@@ -1,6 +1,3 @@
-require_relative 'progress'
-require_relative 'emoji_finder'
-
 ##
 ## Scan an image and return a map of average colors
 ##

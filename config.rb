@@ -3,6 +3,7 @@ require_relative 'lib/gifmaker'
 require_relative 'lib/progress'
 require_relative 'lib/image_scanner'
 require_relative 'lib/image_generator'
+require_relative 'lib/emoji_scanner'
 
 require 'pathname'
 require 'pry'
