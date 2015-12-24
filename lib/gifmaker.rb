@@ -1,11 +1,3 @@
-require 'Rmagick'
-require 'JSON'
-require 'pry'
-
-require_relative 'progress'
-require_relative 'image_generator'
-require_relative 'preview_generator'
-
 ##
 ## Creates multiple emoji mosaics and strings them together into an animation
 ##

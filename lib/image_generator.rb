@@ -1,6 +1,5 @@
 require_relative 'image_scanner'
-require 'pathname'
-require 'pry'
+
 
 ##
 ## Generates emoji mosaics
