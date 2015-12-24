@@ -6,7 +6,7 @@ require 'pry'
 ##
 class EmojiFinder
   def initialize(options = {})
-    @options = options[:compare]
+    @options = options[:finder]
     @map = JSON.parse(File.open('map.json').read)
     @scores = {}
     @done_emojis = {}
@@ -45,28 +45,34 @@ class EmojiFinder
     @scores[filename] = return_score(emoji_info)
   end
 
-  def return_score(info)
+  def return_score(i)
+    score = (i['red'] - @r).abs + (i['green'] - @g).abs + (i['blue'] - @b).abs
     {
-      score: (info['red'] - @r).abs + (info['green'] - @g).abs + (info['blue'] - @b).abs,
-      coverage: info['coverage']
+      score: score,
+      coverage: i['coverage']
     }
   end
 
   def return_matching_emoji
-    ### janky for now but incorporates emoji coverage
-    sorted = @scores.sort_by { |k, v| v[:score] }[0..2]
-    sorted.sort_by{|r| r[1][:coverage]}.reverse.first.first
-  end
-
-  def set_threshold
-    # @scores.values.max
-    @options[:reverse] ? @scores.values.max : @scores.values.min
+    if @options[:coverage]
+      sorted = @scores.sort_by { |k, v| v[:score] }[0..@options[:coverage]]
+      return sorted.sort_by { |r| r[1][:coverage] }.reverse.first.first
+    else
+      min = @scores.values.min_by { |v| v[:score] }
+      @scores.select { |_k, v| v == min }.keys.first
+    end
   end
 
   def set_pixel_colors
     @r = @pixel.red / 257
     @g = @pixel.green / 257
     @b = @pixel.blue / 257
+  end
+
+  def set_coverage_threshold
+    return false unless @options[:coverage]
+    @coverage_threshold = @options[:coverage]
+
   end
 
   def search_range

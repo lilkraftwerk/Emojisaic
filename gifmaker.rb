@@ -60,8 +60,8 @@ options = {
     quality: 5,
     # random_offset: 0.2
   },
-  compare: {
-    # range: 0
+  finder: {
+    coverage: 100
   }
 }
 
