@@ -1,27 +1,34 @@
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
+
+### if you've already seen the same combination of pixel colors
+### no need to go through all again
 class EmojiFinder
   def initialize(options = {})
     @options = options[:finder]
     @map = JSON.parse(File.open('lib/map.json').read)
-    @scores = {}
-    @done_emojis = {}
+    @done_pixels = {}
   end
 
   def closest_emoji(pixel)
     @r = pixel.r
     @g = pixel.g
     @b = pixel.b
-    match_filename = find_emoji(pixel)
+    match_filename = look_up_or_find_emoji(pixel)
     Magick::Image.read(match_filename)[0]
   end
 
+  def look_up_or_find_emoji(pixel)
+    pixel_i = "#{pixel.r}#{pixel.g}#{pixel.b}".to_i
+    @done_pixels[pixel_i] ||= find_emoji(pixel)
+  end
+
   def find_emoji(pixel)
-    return @done_emojis["#{pixel.r}#{pixel.g}#{pixel.b}"] if @done_emojis["#{pixel.r}#{pixel.g}#{pixel.b}"]
+    @scores = {}
     check_every_emoji
     emoji = return_matching_emoji
-    @done_emojis[pixel.to_s] = emoji
+    @done_pixels["#{pixel.r}#{pixel.g}#{pixel.b}".to_i] = emoji
     emoji
   end
 
@@ -56,7 +63,6 @@ class EmojiFinder
   def sort_by_color
     min = @scores.values.min_by { |v| v[:score] }
     t = @scores.find { |_k, v| v == min }
-    binding.pry
   end
 
   def set_pixel_colors
