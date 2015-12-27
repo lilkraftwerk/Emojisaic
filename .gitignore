@@ -1,6 +1,6 @@
 scratch.rb
-output
+output/*.*
 tmp/*.*
 images/*.*
-input
+input/*.*
 speedtests.rb

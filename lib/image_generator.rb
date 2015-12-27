@@ -56,10 +56,6 @@ class EmojiMosaicGenerator
     @finder = EmojiFinder.new(options)
   end
 
-  def noisy?
-    @options[:noisy]
-  end
-
   def set_quality
     @emoji_size = @options[:size]
     @zoom = @options[:zoom]
