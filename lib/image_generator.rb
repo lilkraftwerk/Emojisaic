@@ -38,8 +38,8 @@ class EmojiMosaicGenerator
   private
 
   def adjust_coordinates(pixel_map)
-    pixel_map.x *= @zoom
-    pixel_map.y *= @zoom
+    pixel_map[:x] *= @zoom
+    pixel_map[:y] *= @zoom
     pixel_map = randomize_offset(pixel_map) if @options[:random_offset]
     pixel_map
   end

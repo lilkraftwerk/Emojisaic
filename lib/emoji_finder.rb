@@ -9,13 +9,6 @@ class EmojiFinder
     @done_emojis = {}
   end
 
-  def compare_pixel(pixel)
-    @pixel = pixel
-    set_pixel_colors
-    check_every_emoji
-    return_matching_emoji
-  end
-
   def closest_emoji(pixel)
     @r = pixel.r
     @g = pixel.g
@@ -25,7 +18,7 @@ class EmojiFinder
   end
 
   def find_emoji(pixel)
-    return @done_emojis[pixel.to_s] if @done_emojis[pixel.to_s]
+    return @done_emojis["#{pixel.r}#{pixel.g}#{pixel.b}"] if @done_emojis["#{pixel.r}#{pixel.g}#{pixel.b}"]
     check_every_emoji
     emoji = return_matching_emoji
     @done_emojis[pixel.to_s] = emoji
@@ -44,10 +37,7 @@ class EmojiFinder
 
   def return_score(i)
     score = (i['red'] - @r).abs + (i['green'] - @g).abs + (i['blue'] - @b).abs
-    {
-      score: score,
-      coverage: i['coverage']
-    }
+    Score.new(score, i['coverage'])
   end
 
   def return_matching_emoji
@@ -65,7 +55,8 @@ class EmojiFinder
 
   def sort_by_color
     min = @scores.values.min_by { |v| v[:score] }
-    @scores.select { |_k, v| v == min }.keys.first
+    t = @scores.find { |_k, v| v == min }
+    binding.pry
   end
 
   def set_pixel_colors
@@ -84,3 +75,6 @@ class EmojiFinder
     false
   end
 end
+
+
+Score = Struct.new(:score, :coverage)

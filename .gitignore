@@ -3,3 +3,4 @@ output
 tmp/*.*
 images/*.*
 input
+speedtests.rb

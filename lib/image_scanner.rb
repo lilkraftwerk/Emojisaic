@@ -12,7 +12,7 @@ class ImageScanner
     @pixels
   end
 
-  def average_area
+  def average_colors_for_area
     colors = { r: 0, g: 0, b: 0 }
     @emoji_size.times do |h|
       new_y = @y + h
@@ -22,12 +22,12 @@ class ImageScanner
         colors = add_results_to_tally(results, colors)
       end
     end
-    format_color_averages(colors)
+    create_pixel_struct(colors)
   end
 
-  def format_color_averages(colors)
+  def create_pixel_struct(colors)
     div = divide_pixels(colors, @emoji_size**2)
-    { x: @x, y: @y, r: div[:r], g: div[:g], b: div[:b] }
+    p = Pixel.new(@x, @y, div[:r], div[:g], div[:b])
   end
 
   def add_results_to_tally(results, colors)
@@ -40,7 +40,7 @@ class ImageScanner
   def scan_image
     until @y > @image.rows
       until @x > @image.columns
-        @pixels << Pixel.new(average_area)
+        @pixels << average_colors_for_area
         @x += @emoji_size
       end
       @x = 0
@@ -81,18 +81,4 @@ end
 ##
 ## Just a little holder for information about pixel color and location
 ##
-class Pixel
-  attr_accessor :x, :y, :r, :g, :b
-
-  def initialize(options)
-    @x = options[:x]
-    @y = options[:y]
-    @r = options[:r]
-    @g = options[:g]
-    @b = options[:b]
-  end
-
-  def to_s
-    "#{@r}#{@g}#{b}"
-  end
-end
+Pixel = Struct.new(:x, :y, :r, :g, :b)
