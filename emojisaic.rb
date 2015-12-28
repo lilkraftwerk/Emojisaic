@@ -8,10 +8,13 @@ def generate_emoji_map
   Dir['emojis/*.png'].each do |file|
     EmojiScanner.new(file)
   end
+  exit
 end
 
 def clear_temp_files
+  puts "Removing all files in tmp folder..."
   FileUtils.rm_rf(Dir.glob('tmp/*.png'))
+  exit
 end
 
 def generate_emoji_gif(options)
@@ -34,6 +37,8 @@ def options_from_command_line
     o.integer '-c', '--coverage', '[int] emoji offset for pixel coverage (see docs, it is complicated)', default: nil
     o.bool '-q', '--quiet', '[flag] be quiet! no output in this mode'
     o.bool '-h', '--help', '[flag] print options'
+    o.bool '-t', '--tmp', '[flag] remove all temp files (use by itself)'
+    o.bool '-m', '--map', '[flag] generate new emoji color map (use by itself)'
   end
 
   if opts[:help]
@@ -49,7 +54,7 @@ def get_filename(opts)
   return opts[:i] if opts[:i]
 end
 
-def create_options_hash
+def options_hash
   opts = options_from_command_line
   { filename: get_filename(opts).dup,
     quiet: opts[:quiet],
@@ -61,6 +66,7 @@ def create_options_hash
 end
 
 cl_opts = options_from_command_line
-opts = create_options_hash
-generate_emoji_gif(opts) if cl_opts[:gif]
-generate_still_image(opts) if cl_opts[:image]
+clear_temp_files if cl_opts[:tmp]
+generate_emoji_map if cl_opts[:map]
+generate_emoji_gif(options_hash) if cl_opts[:gif]
+generate_still_image(options_hash) if cl_opts[:image]
