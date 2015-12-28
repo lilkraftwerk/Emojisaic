@@ -33,57 +33,22 @@ class EmojiFinder
   end
 
   def find_best_scoring_emoji
-    best_scores = @map.min_by(@options[:coverage]) do |filename, rgb|
+    scores = @map.min_by(@options[:coverage]) do |filename, rgb|
       (rgb['red'] - @r).abs + (rgb['green'] - @g).abs + (rgb['blue'] - @b).abs 
     end
-    if @options[:coverage]
-      chosen_one = best_scores.max_by{|x| x[1]["coverage"]}[0] if @options[:coverage]
-    else
-      chosen_one = best_scores[0]
-    end
+
+    return emoji_with_max_coverage(scores) if @options[:coverage]
+    scores.first
   end
 
-  def score_emoji(filename, emoji_info)
-    @scores[filename] = return_score(emoji_info)
-  end
-
-  def return_score(i)
-    score = (i['red'] - @r).abs + (i['green'] - @g).abs + (i['blue'] - @b).abs
-    Score.new(score, i['coverage'])
-  end
-
-  def return_matching_emoji
-    if @options[:coverage]
-      sort_by_pixel_coverage_and_color
-    else
-      sort_by_color
-    end
-  end
-
-  def sort_by_pixel_coverage_and_color
-    sorted = @scores.sort_by { |_k, v| v[:score] }[0..@options[:coverage]]
-    sorted.sort_by { |r| r[1][:coverage] }.reverse.first.first
-  end
-
-  def sort_by_color
-    min = @scores.values.min_by { |v| v[:score] }
-    t = @scores.find { |_k, v| v == min }
+  def emoji_with_max_coverage(scores)
+    scores.max_by{|x| x[1]["coverage"]}[0]
   end
 
   def set_pixel_colors
     @r = @pixel.red / 257
     @g = @pixel.green / 257
     @b = @pixel.blue / 257
-  end
-
-  def set_coverage_threshold
-    return false unless @options[:coverage]
-    @coverage_threshold = @options[:coverage]
-  end
-
-  def search_range
-    return @options[:range] if @options[:range]
-    false
   end
 end
 
