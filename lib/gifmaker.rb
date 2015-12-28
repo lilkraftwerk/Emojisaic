@@ -19,7 +19,7 @@ class GifMaker
     @image = Magick::ImageList.new.read(@filename).coalesce
     write_frames
     @files.each_with_index do |filename, index|
-      print "\nDoing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
+      puts "\nDoing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
       @new_filenames << @generator.create_image(filename)
     end
     write_gif
