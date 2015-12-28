@@ -11,7 +11,7 @@ def generate_emoji_map
 end
 
 def generate_emoji_gif(options)
-  gif = EmojiGifmaker(options)
+  gif = GifMaker.new(options)
   gif.make_emoji_gif
 end
 

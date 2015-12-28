@@ -19,8 +19,8 @@ class GifMaker
     @image = Magick::ImageList.new.read(@filename).coalesce
     write_frames
     @files.each_with_index do |filename, index|
-      puts "Doing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
-      @new_filenames << @generator.create_image(@filename)
+      puts "\nDoing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
+      @new_filenames << @generator.create_image(filename)
     end
     write_gif
     @new_filenames.length
@@ -46,13 +46,14 @@ class GifMaker
       new_frame.delay = @image[index].delay
       gif << new_frame
     end
-    dest = "output/#{@name}.gif"
-    puts "Writing to #{dest}..." unless @options[:quiet]
-    gif.write(dest)
+
+    @filename[@name] = "#{@name}-mosaic"
+    puts "Writing to #{@filename}..." unless @options[:quiet]
+    gif.write(@filename)
   end
 
   def write_frames
-    puts 'splitting gif into frames...' unless @options[:quiet]
+    puts "\nsplitting gif into frames..." unless @options[:quiet]
     @files = []
     @image.each_with_index do |image, index|
       index > 9 ? number = index : number = "0#{index}"
