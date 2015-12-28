@@ -24,15 +24,13 @@
 
 <p>From this: </p>
 
-<p><img src="http://i.imgur.com/nqQGixL.gif" alt="original Leia gif"></p>
+<p><img src="http://i.imgur.com/OslOhKy.gifv" alt="original Kesha gif"></p>
 
 <p>To this: </p>
 
-<p><img src="http://i.imgur.com/6WnyTN8.gif" alt="emojisaic Leia gif"></p>
+<p><img src="http://i.imgur.com/1xuoQe2.gifv" alt="emojisaic Kesha gif"></p>
 
-<p>Full 8mb gif <a href="http://i.imgur.com/DdMWDge.gif">here.</a></p>
-
-<p>See a few more examples <a href="http://mojigifs.tumblr.com/">here.</a></p>
+<p>See a few more examples <a href="http://mojigifs.tumblr.com/">(here.)</a></p>
 
 <h3>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Use</h3>
@@ -49,8 +47,19 @@ or </li>
 <li>Marvel @ your emojisaic!</li>
 </ul>
 
-<h2>
-<a id="command-line-options" class="anchor" href="#command-line-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command Line Options</h2>
+<h3>
+<a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span class="octicon octicon-link"></span></a>How It Works</h3>
+
+<p><img src="http://imgur.com/RvJnTm5.png" alt="test image"></p>
+
+<p>Given the image above, the program will scan it in blocks--based on the size you ultimately want the emojis to be--and find the average color for each area. Then it'll find the emoji with the closest average color and replace the area with the matching emoji:</p>
+
+<p><img src="http://imgur.com/gUTKsuH.png" alt="converted test image"></p>
+
+<p>It can get pretty slow depending on the resolution you're looking for, so if you're doing a large GIF I'd recommend running it as a still image first, which will convert the first frame and let you see what the final output will look like.</p>
+
+<h3>
+<a id="options-options-options" class="anchor" href="#options-options-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options, Options, Options</h3>
 
 <p>at least one of these are mandatory: </p>
 
@@ -69,14 +78,14 @@ or </li>
 <li>
 <code>-z [int]</code> or <code>--zoom [int]</code> - multiply output file height and width by this number. default is 1. larger = longer conversion time </li>
 <li>
-<code>-o [int]</code> or <code>--offset [int]</code> - randomly move emojis by this many pixels. default is 0. lower numbers are generally better, anything above 10 or so is visual gibberish #FreeOffset</li>
+<code>-o [int]</code> or <code>--offset [int]</code> - randomly move emojis by this many pixels. default is 0. #FreeOffset</li>
 <li>
-<code>-c [int]</code> or <code>--coverage [int]</code> - generally the emoji finder will use the emoji that is closest to the color for a given pixel area. setting this will prefer emojis with fewer transparent pixels which sometimes looks better. setting this to 10 will find the 10 closest emojis by color and then select the one with the fewest transparent pixels. I recommend setting this between 10 and 30.</li>
+<code>-c [int]</code> or <code>--coverage [int]</code> - generally the emoji finder will use the emoji that is closest to the color for a given pixel area. setting this will prefer emojis with fewer transparent pixels which sometimes looks better</li>
 <li>
 <code>-q</code> or <code>--quiet</code> - silences all output and updates to the console</li>
 </ul>
 
-<p>utilities:</p>
+<p>utilities (run these without any other options):</p>
 
 <ul>
 <li>
@@ -86,11 +95,6 @@ or </li>
 <li>
 <code>-h</code> or <code>--help</code> - print these options to the console</li>
 </ul>
-
-<h3>
-<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Use</h3>
-
-how's my driving? tweet 1-800-<a href="https://twitter.com/nah_solo">@nah_solo</a>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/lilkraftwerk/Emojisaic">Emojisaic</a> is maintained by <a href="https://github.com/lilkraftwerk">lilkraftwerk</a>.</span>
