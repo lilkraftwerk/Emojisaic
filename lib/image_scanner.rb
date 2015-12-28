@@ -2,6 +2,10 @@
 ## Scan an image and return a map of average colors
 ##
 class ImageScanner
+  def initializer(options)
+    @options = options
+  end
+
   def generate_pixel_map(image, emoji_size)
     @image = image
     @emoji_size = emoji_size
@@ -45,7 +49,7 @@ class ImageScanner
       end
       @x = 0
       @y += @emoji_size
-      update
+      update unless @options[:quiet]
     end
   end
 

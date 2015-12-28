@@ -3,8 +3,8 @@
 ##
 class EmojiMosaicGenerator
   def initialize(options = {})
-    @options = options[:generator]
-    create_helpers(options)
+    @options = options
+    create_helpers
     set_quality
   end
 
@@ -12,7 +12,7 @@ class EmojiMosaicGenerator
     regex = %r{\/(.+)\.}
     @name = regex.match(filename)[1]
     assign_images_and_pixel_map(filename)
-    @bar = ProgressBar.new(@pixel_map.length, 'image generation')
+    @bar = ProgressBar.new(@pixel_map.length, 'image generation') unless @options[:quiet]
     add_emojis_to_new_image
     filename[@name] = "#{@name}-mosaic"
     @new_image.write(filename)
@@ -31,7 +31,7 @@ class EmojiMosaicGenerator
       emoji = @finder.closest_emoji(p_map)
       emoji.resize!(@emoji_size * @zoom, @emoji_size * @zoom)
       @new_image.composite!(emoji, p_map.x, p_map.y, Magick::OverCompositeOp)
-      @bar.add(1)
+      @bar.add(1) unless @options[:quiet]
     end
   end
 
@@ -51,9 +51,9 @@ class EmojiMosaicGenerator
     pixel
   end
 
-  def create_helpers(options)
-    @scanner = ImageScanner.new
-    @finder = EmojiFinder.new(options)
+  def create_helpers
+    @scanner = ImageScanner.new(@options)
+    @finder = EmojiFinder.new(@options)
   end
 
   def set_quality

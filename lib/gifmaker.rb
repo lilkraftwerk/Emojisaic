@@ -3,37 +3,40 @@
 ##
 class GifMaker
   def initialize(options = {})
+    @options = options
+    @filename = options[:filename]
     @generator = EmojiMosaicGenerator.new(options)
+    make_filenames
   end
 
-  def make_filenames(name)
-    @name = name
-    @filename = "input/#{@name}.gif"
+  def make_filenames
+    regex = %r{\/(.+)\.}
+    @name = regex.match(@filename)[1]
     @new_filenames = []
   end
 
-  def make_emoji_gif(name)
-    make_filenames(name)
+  def make_emoji_gif
     @image = Magick::ImageList.new.read(@filename).coalesce
     write_frames
     @files.each_with_index do |filename, index|
-      puts "Doing frame #{index + 1}/#{@files.length}"
-      @new_filenames << @generator.create_image(filename)
+      puts "Doing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
+      @new_filenames << @generator.create_image(@filename)
     end
     write_gif
     @new_filenames.length
   end
 
-  def make_preview(name, frames, start_at = 0)
-    old_gif = Magick::Image.read("output/#{name}.gif")
-    new_gif = Magick::ImageList.new
-    (start_at..start_at + frames).to_a.each do |frame_number|
-      new_gif << old_gif[frame_number]
-    end
-    output_dest = "output/#{name}-preview.gif"
-    new_gif.write(output_dest)
-    puts "wrote preview to #{output_dest}"
-  end
+  # commented out for now
+  # def make_preview(name, frames, start_at = 0)
+  #   old_gif = Magick::Image.read("output/#{name}.gif")
+  #   new_gif = Magick::ImageList.new
+  #   (start_at..start_at + frames).to_a.each do |frame_number|
+  #     new_gif << old_gif[frame_number]
+  #   end
+  #   output_dest = "output/#{name}-preview.gif"
+  #   new_gif.write(output_dest)
+  #   puts "wrote preview to #{output_dest}" unless @options[:quiet]
+  # end
 
   def write_gif
     gif = Magick::ImageList.new
@@ -44,12 +47,12 @@ class GifMaker
       gif << new_frame
     end
     dest = "output/#{@name}.gif"
-    puts "Writing to #{dest}..."
+    puts "Writing to #{dest}..." unless @options[:quiet]
     gif.write(dest)
   end
 
   def write_frames
-    puts 'splitting gif into frames...'
+    puts 'splitting gif into frames...' unless @options[:quiet]
     @files = []
     @image.each_with_index do |image, index|
       index > 9 ? number = index : number = "0#{index}"
