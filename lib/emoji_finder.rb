@@ -1,6 +1,7 @@
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
+require 'pry'
 
 ### if you've already seen the same combination of pixel colors
 ### no need to go through all again
@@ -26,15 +27,19 @@ class EmojiFinder
 
   def find_emoji(pixel)
     @scores = {}
-    check_every_emoji
-    emoji = return_matching_emoji
+    emoji = find_best_scoring_emoji
     @done_pixels["#{pixel.r}#{pixel.g}#{pixel.b}".to_i] = emoji
     emoji
   end
 
-  def check_every_emoji
-    @map.each do |filename, emoji_info|
-      score_emoji(filename, emoji_info)
+  def find_best_scoring_emoji
+    best_scores = @map.min_by(@options[:coverage]) do |filename, rgb|
+      (rgb['red'] - @r).abs + (rgb['green'] - @g).abs + (rgb['blue'] - @b).abs 
+    end
+    if @options[:coverage]
+      chosen_one = best_scores.max_by{|x| x[1]["coverage"]}[0] if @options[:coverage]
+    else
+      chosen_one = best_scores[0]
     end
   end
 
