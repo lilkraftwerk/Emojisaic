@@ -27,7 +27,7 @@ class ImageScanner
 
   def create_pixel_struct(colors)
     div = divide_pixels(colors, @emoji_size**2)
-    p = Pixel.new(@x, @y, div[:r], div[:g], div[:b])
+    Pixel.new(@x, @y, div[:r], div[:g], div[:b])
   end
 
   def add_results_to_tally(results, colors)

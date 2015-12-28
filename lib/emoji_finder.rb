@@ -1,8 +1,6 @@
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
-
-require 'pry'
 class EmojiFinder
   def initialize(options = {})
     @options = options[:finder]
@@ -29,18 +27,19 @@ class EmojiFinder
   end
 
   def find_best_scoring_emoji
-    scores = @map.min_by(@options[:coverage]) do |filename, rgb|
-      (rgb['red'] - @r).abs + (rgb['green'] - @g).abs + (rgb['blue'] - @b).abs 
+    scores = @map.min_by(@options[:coverage]) do |_, rgb|
+      score_emoji(rgb)
     end
 
     return emoji_with_max_coverage(scores) if @options[:coverage]
     scores.first
   end
 
+  def score_emoji(rgb)
+    (rgb['red'] - @r).abs + (rgb['green'] - @g).abs + (rgb['blue'] - @b).abs
+  end
+
   def emoji_with_max_coverage(scores)
-    scores.max_by{|x| x[1]["coverage"]}[0]
+    scores.max_by { |x| x[1]['coverage'] }[0]
   end
 end
-
-
-Score = Struct.new(:score, :coverage)
