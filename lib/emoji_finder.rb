@@ -13,7 +13,6 @@ class EmojiFinder
     @g = pixel.g
     @b = pixel.b
     match_filename = look_up_or_find_emoji(pixel)
-    match_filename
     Magick::Image.read(match_filename)[0]
   end
 
