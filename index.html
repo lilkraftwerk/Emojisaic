@@ -28,9 +28,58 @@
 
 <p>To this: </p>
 
-<p><img src="http://i.imgur.com/ZhE4aJQ.png" alt="emojisaic Leia gif"></p>
+<p><img src="http://i.imgur.com/ZhE4aJQ.png" alt="emojisaic Leia gif">
+<a href="http://i.imgur.com/aTK5mkj.gifv">(full 8mb gif here)</a></p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<p>See a few more examples <a href="http://mojigifs.tumblr.com/">(here.)</a></p>
+
+<h3>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Use</h3>
+
+<ul>
+<li>Clone the repo, dude!</li>
+<li><code>ruby emojisaic.rb -g [filename]</code></li>
+<li>Wait. </li>
+<li>Voila!</li>
+</ul>
+
+<h2>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>at least one of these are mandatory: </p>
+
+<ul>
+<li>
+<code>-g [filename]</code> or <code>--gif [filename]</code> - indicate location of the gif to convert</li>
+<li>
+<code>-i [filename]</code> or <code>--image [filename]</code> - indicate location of the still image to convert</li>
+</ul>
+
+<p>optional options: </p>
+
+<ul>
+<li>
+<code>-s [int]</code> or <code>--size [int]</code> - height of the emoji in pixels. default is 8. smaller size = longer conversion time</li>
+<li>
+<code>-z [int]</code> or <code>--zoom [int]</code> - multiply output file height and width by this number. default is 1. larger = longer conversion time </li>
+<li>
+<code>-o [int]</code> or <code>--offset [int]</code> - randomly move emojis by this many pixels. default is 0. lower numbers are generally better, anything above 10 or so is visual gibberish #FreeOffset</li>
+<li>
+<code>-c [int]</code> or <code>--coverage [int]</code> - emojis are scored by their average color. however, some emojis have more pixels filled in and will look better with certain kinds of images. without this option set, the program will replace a given pixel area with the closest emoji by color, regardless of how many non-transparent pixels it contains. setting this to 10, for example, will find the 10 closest emojis by color to a given pixel area and pick the one with the highest percentage of pixel coverage. I recommend setting this to between 10 and 30.</li>
+<li>
+<code>-q</code> or <code>--quiet</code> - silences all output and updates to the console</li>
+</ul>
+
+<p>utilities:</p>
+
+<ul>
+<li>
+<code>-t</code> or <code>--tmp</code> - deletes all temporary images in the tmp/ folder</li>
+<li>
+<code>-m</code> or <code>--map</code> - regenerate emoji color map</li>
+<li>
+<code>-h</code> or <code>--help</code> - print these options to the console</li>
+</ul>
 
 <h3>
 <a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
