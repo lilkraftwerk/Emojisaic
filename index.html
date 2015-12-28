@@ -71,7 +71,7 @@ or </li>
 <li>
 <code>-o [int]</code> or <code>--offset [int]</code> - randomly move emojis by this many pixels. default is 0. lower numbers are generally better, anything above 10 or so is visual gibberish #FreeOffset</li>
 <li>
-<code>-c [int]</code> or <code>--coverage [int]</code> - emojis are scored by their average color. however, some emojis have more pixels filled in and will look better with certain kinds of images. without this option set, the program will replace a given pixel area with the closest emoji by color, regardless of how many non-transparent pixels it contains. setting this to 10, for example, will find the 10 closest emojis by color to a given pixel area and pick the one with the highest percentage of pixel coverage. I recommend setting this to between 10 and 30.</li>
+<code>-c [int]</code> or <code>--coverage [int]</code> - generally the emoji finder will use the emoji that is closest to the color for a given pixel area. setting this will prefer emojis with fewer transparent pixels which sometimes looks better. setting this to 10 will find the 10 closest emojis by color and then select the one with the fewest transparent pixels. I recommend setting this between 10 and 30.</li>
 <li>
 <code>-q</code> or <code>--quiet</code> - silences all output and updates to the console</li>
 </ul>
