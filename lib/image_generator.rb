@@ -9,7 +9,7 @@ class EmojiMosaicGenerator
   end
 
   def create_image(filename)
-    regex = %r{\/(.+)\.}
+    regex = %r{\/?([\w-]+)\.}
     @name = regex.match(filename)[1]
     assign_images_and_pixel_map(filename)
     @bar = ProgressBar.new(@pixel_map.length, 'image generation') unless @options[:quiet]

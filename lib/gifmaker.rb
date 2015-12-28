@@ -10,7 +10,7 @@ class GifMaker
   end
 
   def make_filenames
-    regex = %r{\/(.+)\.}
+    regex = %r{\/?([\w-]+)\.}
     @name = regex.match(@filename)[1]
     @new_filenames = []
   end
