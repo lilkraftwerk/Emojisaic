@@ -19,7 +19,7 @@ class GifMaker
     @image = Magick::ImageList.new.read(@filename).coalesce
     write_frames
     @files.each_with_index do |filename, index|
-      puts "\nDoing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
+      print "\nDoing frame #{index + 1}/#{@files.length}" unless @options[:quiet]
       @new_filenames << @generator.create_image(filename)
     end
     write_gif
@@ -48,12 +48,12 @@ class GifMaker
     end
 
     @filename[@name] = "#{@name}-mosaic"
-    puts "Writing to #{@filename}..." unless @options[:quiet]
+    puts "\nWriting to #{@filename}..." unless @options[:quiet]
     gif.write(@filename)
   end
 
   def write_frames
-    puts "\nsplitting gif into frames..." unless @options[:quiet]
+    print "\nsplitting gif into frames...\n" unless @options[:quiet]
     @files = []
     @image.each_with_index do |image, index|
       index > 9 ? number = index : number = "0#{index}"

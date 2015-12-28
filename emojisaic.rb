@@ -10,6 +10,10 @@ def generate_emoji_map
   end
 end
 
+def clear_temp_files
+  FileUtils.rm_rf(Dir.glob('tmp/*.png'))
+end
+
 def generate_emoji_gif(options)
   gif = GifMaker.new(options)
   gif.make_emoji_gif
