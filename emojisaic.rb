@@ -45,7 +45,6 @@ def get_filename(opts)
   return opts[:i] if opts[:i]
 end
 
-
 def create_options_hash
   opts = options_from_command_line
   { filename: get_filename(opts).dup,
@@ -53,7 +52,7 @@ def create_options_hash
     size: opts[:size],
     zoom: opts[:zoom],
     random_offset: opts[:offset],
-    coverage: opts[:coverage],
+    coverage: opts[:coverage]
   }
 end
 
@@ -61,23 +60,3 @@ cl_opts = options_from_command_line
 opts = create_options_hash
 generate_emoji_gif(opts) if cl_opts[:gif]
 generate_still_image(opts) if cl_opts[:image]
-
-### to do: preview option
-
-
-##
-## sample options hash
-##
-# options = {
-#   generator: {
-#     size: 32,
-#     zoom: 1,
-#     random_offset: 0
-#   },
-#   finder: {
-#     coverage: 20
-#   }
-# }
-
-
-
