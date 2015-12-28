@@ -2,7 +2,7 @@
 ## Scan an image and return a map of average colors
 ##
 class ImageScanner
-  def initializer(options)
+  def initialize(options)
     @options = options
   end
 
