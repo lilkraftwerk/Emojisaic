@@ -1,10 +1,6 @@
 ##
 ## Compare a set of given colors and return an emoji with similar colors
 ##
-require 'pry'
-
-### if you've already seen the same combination of pixel colors
-### no need to go through all again
 class EmojiFinder
   def initialize(options = {})
     @options = options[:finder]
@@ -17,6 +13,7 @@ class EmojiFinder
     @g = pixel.g
     @b = pixel.b
     match_filename = look_up_or_find_emoji(pixel)
+    match_filename
     Magick::Image.read(match_filename)[0]
   end
 
