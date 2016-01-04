@@ -61,6 +61,7 @@ class EmojiScanner
   end
 
   def scan_pixel(pixel)
+    return if (pixel.opacity / 257) > 245
     @counted_pixels += 1
     @red += pixel.red / 257
     @blue += pixel.blue / 257
