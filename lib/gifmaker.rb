@@ -47,7 +47,17 @@ class GifMaker
       gif << new_frame
     end
 
-    @filename[@name] = "#{@name}-mosaic"
+    custom_options = @options.delete_if do |k,v|
+      [:quiet, :filename].include?(k) ||
+        ((k == :size && v == 8) ||
+         (k == :zoom && v == 1) ||
+         (k == :random_offset && v == 0) ||
+         (k == :coverage && v == nil))
+    end
+
+    options_label = custom_options.map { |o,v| "_#{o}-#{v}" }.join if custom_options
+
+    @filename[@name] = "#{@name}-mosaic#{options_label}"
     puts "\nWriting to #{@filename}..." unless @options[:quiet]
     gif.write(@filename)
   end
