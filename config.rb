@@ -6,6 +6,6 @@ require_relative 'lib/image_generator'
 require_relative 'lib/emoji_scanner'
 
 require 'pathname'
-require 'Rmagick'
+require 'rmagick'
 require 'json'
 require 'slop'
